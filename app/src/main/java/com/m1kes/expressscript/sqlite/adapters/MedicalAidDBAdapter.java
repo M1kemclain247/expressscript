@@ -1,0 +1,79 @@
+package com.m1kes.expressscript.sqlite.adapters;
+
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+
+import com.m1kes.expressscript.objects.MedicalAid;
+import com.m1kes.expressscript.sqlite.DBContentProvider;
+import com.m1kes.expressscript.sqlite.tables.MedicalAidTable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MedicalAidDBAdapter {
+
+
+    public static List<MedicalAid> getAll(Context context){
+
+        List<MedicalAid> data = new ArrayList<>();
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor = cr.query (DBContentProvider.MEDICAL_AID_URI , null, null, null, null);
+
+        if(cursor == null || cursor.getCount() < 1) return data;
+
+            while (cursor.moveToNext()) {
+                // Gets the value from the column.
+                MedicalAid item = new MedicalAid();
+
+                int id = cursor.getInt(cursor.getColumnIndex(MedicalAidTable.ID));
+                String name = cursor.getString(cursor.getColumnIndex (MedicalAidTable.NAME));
+
+                item.setId(id);
+                item.setName(name);
+
+                System.out.println("Loading from DB: "+item.toString());
+
+                data.add(item);
+            }
+
+            cursor.close();
+
+        return data;
+    }
+
+
+    public static void add(MedicalAid item, Context context) {
+
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(MedicalAidTable.ID, item.getId());
+        initialValues.put(MedicalAidTable.NAME, item.getName());
+
+
+        System.out.println("Adding Bay : "+item.toString());
+        Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI, MedicalAidTable.TABLE_NAME);
+        Uri resultUri = context.getContentResolver().insert(contentUri, initialValues);
+
+        System.out.println("Added A Bay Successfully");
+    }
+
+    private static void deleteAll(Context context){
+
+        Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI, MedicalAidTable.TABLE_NAME);
+        int result = context.getContentResolver().delete(contentUri,null,null);
+
+        System.out.println("Deleted status: "+result);
+    }
+
+    public static void refill(List<MedicalAid> data, Context context) {
+        deleteAll(context);
+        for(MedicalAid item : data){
+            add(item,context);
+        }
+    }
+
+
+
+}
