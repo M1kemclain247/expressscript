@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="@dimen/cardview_default_elevation"
     app:cardCornerRadius="@dimen/elevation_low"
-    app:cardBackgroundColor="@color/colorMenuCards"
+    app:cardBackgroundColor="@color/accent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:src="@color/colorMenuCards"
+        android:src="@color/accent"
         android:background="@drawable/custom_menu_item_state"
         android:layout_height="match_parent">
 
@@ -34,7 +34,7 @@
             android:paddingTop="10dp"
             android:textStyle="bold"
             android:layout_marginBottom="24dp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:layout_below="@+id/imageView"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>

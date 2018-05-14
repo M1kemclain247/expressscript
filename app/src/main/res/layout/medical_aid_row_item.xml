@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorMenuCards"
+        android:background="@color/white"
         android:layout_weight="1"
         android:layout_margin="20dp">
 
@@ -29,18 +29,23 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/aidLogo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_file_plus_white_48dp"
-                    android:id="@+id/imageView3"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_file_plus_white_48dp" />
 
                 <TextView
                     android:text="Cimas "
                     android:id="@+id/txtMedicalAidName"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:layout_weight="1" />
 
             </LinearLayout>

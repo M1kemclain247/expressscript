@@ -22,10 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_medical_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MedicalAidActivity"
-            >
-
-        </activity>
+        <activity android:name=".MedicalAidActivity"></activity>
         <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait"
@@ -43,11 +40,11 @@
         <activity android:name=".MessagesActivity" />
         <activity android:name=".OrderStatus" />
 
-
         <provider
             android:name=".sqlite.DBContentProvider"
             android:authorities="expscriptProviderAuthorities" />
 
+        <activity android:name=".ViewMedicalAid"></activity>
     </application>
 
 </manifest>

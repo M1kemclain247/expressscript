@@ -88,11 +88,11 @@
                     android:id="@+id/btnRetryUpdate" />
 
                 <Button
-                    android:text="Work Offline"
+                    android:id="@+id/btnWorkOffline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/btnWorkOffline"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="Skip" />
             </LinearLayout>
 
         </LinearLayout>

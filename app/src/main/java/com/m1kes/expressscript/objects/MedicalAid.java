@@ -2,7 +2,9 @@ package com.m1kes.expressscript.objects;
 
 import org.json.simple.JSONObject;
 
-public class MedicalAid {
+import java.io.Serializable;
+
+public class MedicalAid implements Serializable{
 
     private int id;
     private String name;
@@ -47,4 +49,7 @@ public class MedicalAid {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+
+
 }

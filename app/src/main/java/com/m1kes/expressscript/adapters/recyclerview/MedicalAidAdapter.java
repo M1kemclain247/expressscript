@@ -2,14 +2,17 @@ package com.m1kes.expressscript.adapters.recyclerview;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.m1kes.expressscript.R;
+import com.m1kes.expressscript.ViewMedicalAid;
 import com.m1kes.expressscript.objects.MedicalAid;
 
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import butterknife.ButterKnife;
 
 public class MedicalAidAdapter extends RecyclerView.Adapter<MedicalAidAdapter.RecyclerViewHolder> {
 
+    public final static String KEY_INTENT = "aid";
     private List<MedicalAid> data;
     private Context context;
     private MedicalAidAdapter.RecyclerViewHolder viewHolder;
@@ -49,6 +53,12 @@ public class MedicalAidAdapter extends RecyclerView.Adapter<MedicalAidAdapter.Re
 
         if (item != null) {
             holder.medicalName.setText(item.getName());
+
+            if(item.getName().equalsIgnoreCase("Cimas")){
+                holder.aidLogo.setImageDrawable(context.getResources().getDrawable(R.drawable.cimass));
+            }else if(item.getName().equalsIgnoreCase("Hmmas")){
+                holder.aidLogo.setImageDrawable(context.getResources().getDrawable(R.drawable.hmmas));
+            }
         }
     }
 
@@ -60,12 +70,30 @@ public class MedicalAidAdapter extends RecyclerView.Adapter<MedicalAidAdapter.Re
     class RecyclerViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.txtMedicalAidName) TextView medicalName;
+        @BindView(R.id.aidLogo) ImageView aidLogo;
         private Context context;
 
         RecyclerViewHolder(View view,Context context){
             super(view);
             ButterKnife.bind(this, itemView);
-            context = itemView.getContext();
+            this.context = itemView.getContext();
+
+            if(context != null){
+                final Context finalContext = context;
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        MedicalAid aid =  data.get(getAdapterPosition());
+                        if(aid == null)return;
+
+                        Intent i = new Intent(finalContext, ViewMedicalAid.class);
+                        i.putExtra(KEY_INTENT,aid);
+                        finalContext.startActivity(i);
+                    }
+                });
+            }
+
         }
     }
 

@@ -39,25 +39,34 @@ public class MedicalAidActivity extends AppCompatActivity {
         CoreUtils.setupActionBar("Medical Aid",this);
         recyclerView = findViewById(R.id.recylerMedicalAid);
 
-        WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
-            @Override
-            public void onSuccess(String response) {
 
-                data = MedicalAidJsonParser.getMedicalAid(response);
-                //Setup persistant storage
-                MedicalAidDBAdapter.refill(data,context);
+        List<MedicalAid> aids = MedicalAidDBAdapter.getAll(context);
 
-                setupRecyclerView();
-                Toast.makeText(context,"Updated Successfully!",Toast.LENGTH_LONG).show();
-            }
+        if(aids == null || aids.isEmpty()){
 
-            @Override
-            public void onFailed() {
-                Toast.makeText(context,"Unable to connect, check your Internet Connection!",Toast.LENGTH_LONG).show();
-            }
-        });
+            WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
+                @Override
+                public void onSuccess(String response) {
 
-        request.execute(EndPoints.API_URL + EndPoints.URL_MEDICAL_AID + ClientIDManager.getClientID(context));
+                    data = MedicalAidJsonParser.getMedicalAid(response);
+                    //Setup persistant storage
+                    MedicalAidDBAdapter.refill(data,context);
+
+                    setupRecyclerView();
+                    Toast.makeText(context,"Updated Successfully!",Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onFailed() {
+                    Toast.makeText(context,"Unable to connect, check your Internet Connection!",Toast.LENGTH_LONG).show();
+                }
+            });
+
+            request.execute(EndPoints.API_URL + EndPoints.URL_MEDICAL_AID + ClientIDManager.getClientID(context));
+
+        }else{
+            this.data = aids;
+        }
 
         setupRecyclerView();
     }

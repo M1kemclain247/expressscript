@@ -24,9 +24,9 @@ import butterknife.ButterKnife;
 public class MainMenuActivity extends AppCompatActivity {
 
     Integer imageIds[] = {R.drawable.ic_progress_upload_black_48dp,R.drawable.ic_file_plus_black_48dp,R.drawable.ic_information_black_48dp,R.drawable.ic_forum_black_48dp,
-            R.drawable.ic_book_open_variant_black_48dp,R.drawable.ic_logout_black_48dp};
+            R.drawable.ic_book_open_variant_black_48dp};
     GridView gridView;
-    String []keyWords ={"Create Quote","Medical Aid","Order Status","Messages","Contact Us","Logout"};
+    String []keyWords ={"Create Quote","Medical Aid","Order Status","Messages","Contact Us"};
     private Context context = this;
     private RelativeLayout rootView;
 
@@ -72,9 +72,6 @@ public class MainMenuActivity extends AppCompatActivity {
                         break;
                     case 4://Contact Us
                         showContactUsDialog();
-                        break;
-                    case 5: //Logout
-                        logout();
                         break;
                     default:
 
