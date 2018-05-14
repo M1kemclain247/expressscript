@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_medical_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MedicalAidActivity"></activity>
+        <activity android:name=".MedicalAidActivity" />
         <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait"
@@ -33,18 +33,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UploadScreen" />
+        <activity android:name=".CreateQuotation" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MessagesActivity" />
-        <activity android:name=".OrderStatus" />
+        <activity android:name=".Orders" />
 
         <provider
             android:name=".sqlite.DBContentProvider"
             android:authorities="expscriptProviderAuthorities" />
 
-        <activity android:name=".ViewMedicalAid"></activity>
+        <activity android:name=".ViewMedicalAid" />
+        <activity android:name=".NewMessageActivity" />
+        <activity android:name=".Quotes" />
+        <activity android:name=".SendQuotation"></activity>
     </application>
 
 </manifest>

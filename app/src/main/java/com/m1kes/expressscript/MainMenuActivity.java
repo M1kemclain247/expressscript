@@ -23,10 +23,10 @@ import butterknife.ButterKnife;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    Integer imageIds[] = {R.drawable.ic_progress_upload_black_48dp,R.drawable.ic_file_plus_black_48dp,R.drawable.ic_information_black_48dp,R.drawable.ic_forum_black_48dp,
+    Integer imageIds[] = {R.drawable.ic_progress_upload_black_48dp,R.drawable.ic_file_plus_black_48dp,R.drawable.ic_information_black_48dp,R.drawable.ic_information_black_48dp,R.drawable.ic_forum_black_48dp,
             R.drawable.ic_book_open_variant_black_48dp};
     GridView gridView;
-    String []keyWords ={"Create Quote","Medical Aid","Order Status","Messages","Contact Us"};
+    String []keyWords ={"Create Quote","Medical Aid","Quotes","Orders","Messages","Contact Us"};
     private Context context = this;
     private RelativeLayout rootView;
 
@@ -59,18 +59,21 @@ public class MainMenuActivity extends AppCompatActivity {
                 switch (position){
 
                     case 0://Create Quote
-                        startActivity(new Intent(MainMenuActivity.this,UploadScreen.class));
+                        startActivity(new Intent(MainMenuActivity.this,CreateQuotation.class));
                         break;
                     case 1://Medical Aid
                         startActivity(new Intent(MainMenuActivity.this,MedicalAidActivity.class));
                         break;
-                    case 2: //OrderStatus
-                        startActivity(new Intent(MainMenuActivity.this,OrderStatus.class));
+                    case 2: //Quotes
+                        startActivity(new Intent(MainMenuActivity.this,Quotes.class));
                         break;
-                    case 3: //Messages
+                    case 3://Orders
+                        startActivity(new Intent(MainMenuActivity.this,Orders.class));
+                        break;
+                    case 4: //Messages
                         startActivity(new Intent(MainMenuActivity.this,MessagesActivity.class));
                         break;
-                    case 4://Contact Us
+                    case 5://Contact Us
                         showContactUsDialog();
                         break;
                     default:

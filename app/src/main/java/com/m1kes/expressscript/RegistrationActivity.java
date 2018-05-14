@@ -53,9 +53,8 @@ public class RegistrationActivity extends AppCompatActivity {
     @BindView(R.id.female) RadioButton _female;
     @BindView(R.id.gender_radiogroup)RadioGroup genderRadioGroup;
     @BindView(R.id.btn_signup) Button _signupButton;
-    @BindView(R.id.link_login) TextView _loginLink;
-
     @BindView(R.id.birthday_edittext)EditText birthday_edittext ;
+
     private DatePickerDialog datePickerDialog;
     private Context context;
 
@@ -74,13 +73,6 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
         prepareDatePickerDialog();
 
         birthday_edittext.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +81,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-
     }
 
 
@@ -237,10 +228,8 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private void prepareDatePickerDialog() {
-        //Get current date
         Calendar calendar=Calendar.getInstance();
 
-        //Create datePickerDialog with initial date which is current and decide what happens when a date is selected.
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -263,8 +252,7 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+        Toast.makeText(context, "Registration failed!, Please try again", Toast.LENGTH_LONG).show();
         _signupButton.setEnabled(true);
     }
 

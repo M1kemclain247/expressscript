@@ -10,5 +10,7 @@ public class EndPoints {
 
     public static final String URL_MEDICAL_AID = "api/MedicalAids/GetAll/";
     public static final String API_SIGNUP_URL = "api/Client/Register";
+    public static final String API_GET_ALL_MESSAGES = "api/Chat/GetMessages/";
+    public static final String API_SEND_CHAT = "api/Chat/Send";
 
 }

@@ -6,14 +6,19 @@ import android.view.MenuItem;
 
 import com.m1kes.expressscript.utils.CoreUtils;
 
-public class OrderStatus extends AppCompatActivity {
+import butterknife.ButterKnife;
+
+public class Quotes extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_status);
+        setContentView(R.layout.activity_quotes);
+        CoreUtils.setupActionBar("Quotes",this);
+        ButterKnife.bind(this);
 
-        CoreUtils.setupActionBar("Order Status",this);
+
+
 
     }
 
