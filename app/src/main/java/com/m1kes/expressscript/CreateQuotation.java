@@ -7,8 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.Time;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,9 +34,12 @@ import butterknife.ButterKnife;
 
 public class CreateQuotation extends AppCompatActivity {
 
-    @BindView(R.id.btnBrowseImage)Button btnBrowseImg;
-    @BindView(R.id.btnTakePhoto)Button btnTakePhoto;
-    @BindView(R.id.btnCreateTxtQuote)Button btnCreateTxtQuote;
+    @BindView(R.id.btnBrowseImage)
+    Button btnBrowseImg;
+    @BindView(R.id.btnTakePhoto)
+    Button btnTakePhoto;
+    @BindView(R.id.btnCreateTxtQuote)
+    Button btnCreateTxtQuote;
 
     private final int REQUEST_TAKE_PHOTO = 10021;
     private final int REQUEST_BROWSE_GALLERY = 10022;
@@ -41,11 +47,13 @@ public class CreateQuotation extends AppCompatActivity {
     public final static String KEY_INTENT_IMAGE = "SendQuotation-Image";
     private static SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_quotation);
-        CoreUtils.setupActionBar("Create Quote",this);
+        CoreUtils.setupActionBar("Create Quote", this);
         ButterKnife.bind(this);
         context = this;
 
@@ -62,8 +70,20 @@ public class CreateQuotation extends AppCompatActivity {
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePicture, REQUEST_TAKE_PHOTO);
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+
+                mHighQualityImageUri = generateTimeStampPhotoFileUri();
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mHighQualityImageUri);
+                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+            }
+        });
+
+        btnCreateTxtQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context,CreateTextQuotation.class));
             }
         });
 
@@ -81,12 +101,14 @@ public class CreateQuotation extends AppCompatActivity {
     }
 
 
+    private Uri mHighQualityImageUri = null;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK && data == null)return;
+        if (resultCode != RESULT_OK && data == null) return;
 
-        if (requestCode == REQUEST_BROWSE_GALLERY ) {
+        if (requestCode == REQUEST_BROWSE_GALLERY) {
 
             Uri imageUri = data.getData();
             try {
@@ -98,53 +120,69 @@ public class CreateQuotation extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        }else if (requestCode == REQUEST_TAKE_PHOTO ) {
+        } else if (requestCode == REQUEST_TAKE_PHOTO) {
 
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            if(selectedImage == null)return;
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mHighQualityImageUri);
+                processImage(bitmap);
 
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            if(cursor == null)return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String filePath = cursor.getString(columnIndex);
-
-            cursor.close();
-
-
-            File f = new File(filePath);
-            String filename= f.getName();
-
-            Toast.makeText(context, "File Path:"+filePath, Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, "Filename:"+filename, Toast.LENGTH_SHORT).show();
-
-            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-            processImage(bitmap);
         }
 
     }
 
-    public void processImage(Bitmap image){
+    public void processImage(Bitmap image) {
 
         String generatedName = "img-" + df.format(new Date());
-        String file = CoreUtils.saveFile(image,generatedName,context);
+        String file = CoreUtils.saveFile(image, generatedName, context);
 
-        if(file == null){
-            Toast.makeText(context,"Error occured while saving image!",Toast.LENGTH_SHORT).show();
+        if (file == null) {
+            Toast.makeText(context, "Error occured while saving image!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(context,"Processing Image",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Processing Image", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(context, SendQuotation.class);
-        i.putExtra(KEY_INTENT_IMAGE,file);
+        i.putExtra(KEY_INTENT_IMAGE, file);
         startActivity(i);
     }
 
-    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
+
+
+    private Uri generateTimeStampPhotoFileUri() {
+
+        Uri photoFileUri = null;
+        File outputDir = getPhotoDirectory();
+        if (outputDir != null) {
+            Time t = new Time();
+            t.setToNow();
+            File photoFile = new File(outputDir, System.currentTimeMillis()
+                    + ".jpg");
+            photoFileUri = Uri.fromFile(photoFile);
+        }
+        return photoFileUri;
+    }
+
+    private File getPhotoDirectory() {
+        File outputDir = null;
+        String externalStorageStagte = Environment.getExternalStorageState();
+        if (externalStorageStagte.equals(Environment.MEDIA_MOUNTED)) {
+            File photoDir = Environment
+                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            outputDir = new File(photoDir, getString(R.string.app_name));
+            if (!outputDir.exists())
+                if (!outputDir.mkdirs()) {
+                    Toast.makeText(
+                            this,
+                            "Failed to create directory "
+                                    + outputDir.getAbsolutePath(),
+                            Toast.LENGTH_SHORT).show();
+                    outputDir = null;
+                }
+        }
+        return outputDir;
     }
 }

@@ -47,7 +47,8 @@
         <activity android:name=".ViewMedicalAid" />
         <activity android:name=".NewMessageActivity" />
         <activity android:name=".Quotes" />
-        <activity android:name=".SendQuotation"></activity>
+        <activity android:name=".SendQuotation" />
+        <activity android:name=".CreateTextQuotation"></activity>
     </application>
 
 </manifest>

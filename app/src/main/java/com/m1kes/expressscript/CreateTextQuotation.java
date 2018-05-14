@@ -3,26 +3,18 @@ package com.m1kes.expressscript;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.RadioButton;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.m1kes.expressscript.objects.Message;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,50 +22,26 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SendQuotation extends AppCompatActivity {
+public class CreateTextQuotation extends AppCompatActivity {
 
-    @BindView(R.id.imgQuotationSend) ImageView imgQuotationSend;
     private Context context;
-    private Bitmap image;
+    @BindView(R.id.txtQuotationText)EditText txtQuotationText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_quotation);
+        setContentView(R.layout.activity_create_text_quotation);
         CoreUtils.setupActionBar("Send Quotation",this);
         ButterKnife.bind(this);
         context = this;
 
-
-        initView();
-    }
-
-    private void initView(){
-
-        try {
-            String file = (String) getIntent().getStringExtra(CreateQuotation.KEY_INTENT_IMAGE);
-            if(file == null ) finish();
-
-            Bitmap image = CoreUtils.fetchFile(file,context);
-            if(image == null)finish();
-
-            this.image = image;
-
-            Glide.with(context)
-                    .load(image)
-                    .into(imgQuotationSend);
-
-        }catch (Exception e){
-            e.printStackTrace();
-            finish();
-        }
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.quotation_send_menu, menu);
+        inflater.inflate(R.menu.quotation_text_send, menu);
         return true;
     }
 
@@ -83,14 +51,20 @@ public class SendQuotation extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.action_send_quotation:
+            case R.id.action_send_text_quotation:
                 showDialog();
                 break;
         }
         return true;
     }
 
+    private boolean validate(){
+        if(txtQuotationText.getText().toString().length() <= 0)return false;
+        else return true;
+    }
+
     private void showDialog() {
+        if(!validate())return;
 
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Confirm");
@@ -98,7 +72,7 @@ public class SendQuotation extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        postImage();
+                        postText();
                         dialog.dismiss();
                         finish();
                     }
@@ -115,7 +89,7 @@ public class SendQuotation extends AppCompatActivity {
 
     }
 
-    public void postImage(){
+    public void postText(){
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -124,31 +98,35 @@ public class SendQuotation extends AppCompatActivity {
                             @Override
                             public void onSuccess(String response) {
                                 System.out.println("Response is : " + response);
-                                Toast.makeText(context,"Image has been sent Successfully!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onFailed() {
                                 System.out.println("Failed to register!");
-                                Toast.makeText(context,"Failed to Send Image!",Toast.LENGTH_LONG).show();
+                                Toast.makeText(context,"Failed to Send Quote!",Toast.LENGTH_LONG).show();
                             }
                         });
 
                         Map<String,String> params = new HashMap<>();
 
-                        String encoded = CoreUtils.toBase64(image,true);
+                        String message = txtQuotationText.getText().toString();
 
-                        params.put("ClientId",ClientIDManager.getClientID(context)+"");
-                        params.put("ImageBytes",encoded);
+                        params.put("ClientId", ClientIDManager.getClientID(context)+"");
+                        params.put("Message",message);
 
                         System.out.println("Params :");
                         System.out.println("ClientId : "+ClientIDManager.getClientID(context)+"");
-                        System.out.println("ImageBytes : " + encoded);
+                        System.out.println("Message : " + message);
 
-                        webPost.execute(EndPoints.API_URL + EndPoints.API_CREATE_QUOTE_IMAGE ,params);
+                        webPost.execute(EndPoints.API_URL + EndPoints.API_CREATE_QUOTE_TEXT ,params);
 
                     }
                 }, 1000);
     }
+
+
+
+
 
 }

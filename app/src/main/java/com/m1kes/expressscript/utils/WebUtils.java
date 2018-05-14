@@ -81,7 +81,7 @@ public class WebUtils {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             callback.onFailed();
-                            Log.d("Error.Response", error.getLocalizedMessage());
+                            Log.d("Error.Response", error.getLocalizedMessage() + "");
                         }
                     }
             ) {
