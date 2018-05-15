@@ -182,13 +182,14 @@ public class CoreUtils {
     }
 
     public static String toBase64(Bitmap bitmap,boolean resize){
+        if(bitmap == null)return null;
 
-        Bitmap image = null;
-        if(resize) resize(bitmap,100,100); else image = bitmap;
+        if(resize){
+            bitmap = resize(bitmap,100,100);
+        }
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        assert image != null;
-        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 

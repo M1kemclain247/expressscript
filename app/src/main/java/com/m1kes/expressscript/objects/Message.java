@@ -14,6 +14,13 @@ public class Message implements Parcelable{
     private Bitmap bitmap;
     private String file_path;
 
+
+
+    public Message(int id, String content) {
+        this.id = id;
+        this.content = content;
+    }
+
     public Message(int id, int client_id, String content, Bitmap bitmap) {
         this.id = id;
         this.client_id = client_id;

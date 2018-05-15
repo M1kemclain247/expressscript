@@ -9,7 +9,7 @@ public class MessageTable {
     public static final String TABLE_NAME = "user_messages";
 
     public static final String ID = "id";
-    public static final String NAME = "name";
+    public static final String CONTENT = "content";
 
 
     // Database creation SQL statement
@@ -17,7 +17,7 @@ public class MessageTable {
             + TABLE_NAME
             + "("
             + ID + " INTEGER PRIMARY KEY, "
-            + NAME + " TEXT NOT NULL "
+            + CONTENT + " TEXT NOT NULL "
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {

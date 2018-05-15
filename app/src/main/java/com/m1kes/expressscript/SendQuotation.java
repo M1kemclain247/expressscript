@@ -137,6 +137,10 @@ public class SendQuotation extends AppCompatActivity {
                         Map<String,String> params = new HashMap<>();
 
                         String encoded = CoreUtils.toBase64(image,true);
+                        if(encoded == null){
+                            Toast.makeText(context,"Failed to send image is null",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
                         params.put("ClientId",ClientIDManager.getClientID(context)+"");
                         params.put("ImageBytes",encoded);

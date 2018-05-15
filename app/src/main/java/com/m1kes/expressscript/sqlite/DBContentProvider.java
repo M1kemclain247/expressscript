@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.m1kes.expressscript.sqlite.tables.MedicalAidTable;
+import com.m1kes.expressscript.sqlite.tables.MessageTable;
 
 
 public class DBContentProvider extends ContentProvider {
@@ -21,6 +22,10 @@ public class DBContentProvider extends ContentProvider {
     //Create Content Uri's for the adapters to access
     public static final Uri MEDICAL_AID_URI = Uri.parse("content://" + AUTHORITY
             + "/" + MedicalAidTable.TABLE_NAME);
+
+    public static final Uri MESSAGES_URI = Uri.parse("content://" + AUTHORITY
+            + "/" + MessageTable.TABLE_NAME);
+
     private SQLiteDatabase db;
 
     @Override

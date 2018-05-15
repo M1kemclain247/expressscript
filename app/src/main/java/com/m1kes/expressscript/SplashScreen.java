@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.m1kes.expressscript.storage.ClientIDManager;
 
 import java.util.ArrayList;
@@ -38,6 +40,8 @@ public class SplashScreen extends AppCompatActivity {
     Button retryUpdateBtn;
     @BindView(R.id.txtUpdateDetails)
     TextView updateDetails;
+    @BindView(R.id.image)KenBurnsView img;
+
     private Context context;
 
     @Override
@@ -59,8 +63,9 @@ public class SplashScreen extends AppCompatActivity {
            updateDetails.setText("Checking for updated");
            SkipTask();
        }
-
-
+        Glide.with(context)
+                .load(R.drawable.woman_design)
+                .into(img);
     }
 
 
