@@ -5,19 +5,22 @@ import android.util.Log;
 
 public class MessageTable {
 
-    // Database table
+
     public static final String TABLE_NAME = "user_messages";
 
     public static final String ID = "id";
     public static final String CONTENT = "content";
+    public static final String SENDER = "sender";
+    public static final String DATE = "date";
 
 
-    // Database creation SQL statement
     private static final String TABLE_CREATE = "create table "
             + TABLE_NAME
             + "("
             + ID + " INTEGER PRIMARY KEY, "
-            + CONTENT + " TEXT NOT NULL "
+            + CONTENT + " TEXT NOT NULL, "
+            + SENDER + " TEXT NOT NULL, "
+            + DATE + " DOUBLE NOT NULL "
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {

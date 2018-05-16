@@ -4,7 +4,11 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.m1kes.expressscript.objects.custom.CustomDate;
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Message implements Parcelable{
 
@@ -12,28 +16,19 @@ public class Message implements Parcelable{
     private int client_id;
     private String content;
     private Bitmap bitmap;
-    private String file_path;
-
-
+    private String sender;
+    private CustomDate date;
 
     public Message(int id, String content) {
         this.id = id;
         this.content = content;
     }
 
-    public Message(int id, int client_id, String content, Bitmap bitmap) {
+    public Message(int id, String content, String sender,CustomDate date) {
         this.id = id;
-        this.client_id = client_id;
         this.content = content;
-        this.bitmap = bitmap;
-    }
-
-    public Message(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
-
-    public Message(String file_path) {
-        this.file_path = file_path;
+        this.sender = sender;
+        this.date = date;
     }
 
     public int getId() {
@@ -44,14 +39,6 @@ public class Message implements Parcelable{
         this.id = id;
     }
 
-    public int getClient_id() {
-        return client_id;
-    }
-
-    public void setClient_id(int client_id) {
-        this.client_id = client_id;
-    }
-
     public String getContent() {
         return content;
     }
@@ -60,14 +47,17 @@ public class Message implements Parcelable{
         this.content = content;
     }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    public String getSender() {
+        return sender;
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        this.bitmap = bitmap;
+    public String getCreationTime() {
+        return date.getShortTime();
     }
 
+    public CustomDate getDate() {
+        return date;
+    }
 
     public Message(Parcel in) {
         id = in.readInt();

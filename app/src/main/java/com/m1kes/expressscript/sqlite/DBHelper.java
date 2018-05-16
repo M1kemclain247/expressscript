@@ -3,17 +3,28 @@ package com.m1kes.expressscript.sqlite;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.m1kes.expressscript.sqlite.tables.MedicalAidTable;
 import com.m1kes.expressscript.sqlite.tables.MessageTable;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "express_script.db";
-    private static final int DATABASE_VERSION = 2;
+    private final static String LOG_TAG = "Database";
 
-    public DBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    private static final String DATABASE_NAME = "express_script.db";
+    private static String DATABASE_PATH = "";
+    private static final int DATABASE_VERSION = 6;
+    private static Context context;
+
+
+    public DBHelper(Context ctx) {
+        super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
+
+        context = ctx;
+        DATABASE_PATH = context.getDatabasePath(DATABASE_NAME).getAbsolutePath();
+        Log.e(LOG_TAG,"DB Path : " + DATABASE_PATH);
+
     }
 
 
@@ -21,15 +32,15 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         MedicalAidTable.onCreate(sqLiteDatabase);
         MessageTable.onCreate(sqLiteDatabase);
-        System.out.println("Database's Created");
+        Log.e(LOG_TAG,"OnCreate called for database and tables!");
     }
 
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        MedicalAidTable.onUpgrade(sqLiteDatabase, i, i1);
-        MessageTable.onUpgrade(sqLiteDatabase,i,i1);
-        System.out.println("Database's Upgraded");
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int old_version, int new_version) {
+        MedicalAidTable.onUpgrade(sqLiteDatabase, old_version, new_version);
+        MessageTable.onUpgrade(sqLiteDatabase, old_version, new_version);
+        Log.e(LOG_TAG,"OnUpgrade called for database and tables!");
     }
 
 

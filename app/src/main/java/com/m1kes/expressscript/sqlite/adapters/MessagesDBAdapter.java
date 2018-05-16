@@ -7,10 +7,14 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.m1kes.expressscript.objects.Message;
+import com.m1kes.expressscript.objects.custom.CustomDate;
 import com.m1kes.expressscript.sqlite.DBContentProvider;
 import com.m1kes.expressscript.sqlite.tables.MessageTable;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class MessagesDBAdapter {
@@ -27,11 +31,20 @@ public class MessagesDBAdapter {
 
             int id = cursor.getInt(cursor.getColumnIndex(MessageTable.ID));
             String content = cursor.getString(cursor.getColumnIndex(MessageTable.CONTENT));
+            String sender = cursor.getString(cursor.getColumnIndex(MessageTable.SENDER));
+            long time = cursor.getLong(cursor.getColumnIndex(MessageTable.DATE));
 
-            data.add(new Message(id,content));
+            data.add(new Message(id,content,sender,new CustomDate(time)));
         }
 
         cursor.close();
+
+        Collections.sort(data, new Comparator<Message>() {
+            @Override
+            public int compare(Message o1, Message o2) {
+                return o1.getDate().getDate().compareTo(o2.getDate().getDate());
+            }
+        });
 
         return data;
     }
@@ -42,6 +55,8 @@ public class MessagesDBAdapter {
         ContentValues initialValues = new ContentValues();
         initialValues.put(MessageTable.ID, msg.getId());
         initialValues.put(MessageTable.CONTENT, msg.getContent());
+        initialValues.put(MessageTable.SENDER, msg.getSender());
+        initialValues.put(MessageTable.DATE, new CustomDate().getLongTime());
 
         System.out.println("Adding Message : "+msg.toString());
         Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI, MessageTable.TABLE_NAME);

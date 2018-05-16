@@ -20,9 +20,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class CoreUtils {
+
+    private static Random random = new Random();
 
     public static String getDeviceId(Context context) {
         return android.os.Build.SERIAL;
@@ -193,6 +196,18 @@ public class CoreUtils {
         return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 
+    public static int getRandomNumber(int low_bound, int upper_bound){
+        return random.nextInt(upper_bound-low_bound) + low_bound;
+    }
+
+    public static int getRandomNumber(int length) {
+        String chars = "0123456789";
+        StringBuilder b = new StringBuilder(length);
+        for (int j = 0; j < length; j++) {
+            b.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return Integer.parseInt(b.toString());
+    }
 
 }
 
