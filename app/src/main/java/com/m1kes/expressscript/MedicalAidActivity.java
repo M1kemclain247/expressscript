@@ -1,12 +1,14 @@
 package com.m1kes.expressscript;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.m1kes.expressscript.adapters.recyclerview.MedicalAidAdapter;
@@ -19,14 +21,17 @@ import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
 import com.m1kes.expressscript.utils.parsers.MedicalAidJsonParser;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MedicalAidActivity extends AppCompatActivity {
 
     private Context context;
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.recylerMedicalAid) RecyclerView recyclerView;
+
     private MedicalAidAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<MedicalAid> data;
@@ -35,12 +40,11 @@ public class MedicalAidActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medical_aid);
+        ButterKnife.bind(this);
         context = this;
         CoreUtils.setupActionBar("Medical Aid",this);
-        recyclerView = findViewById(R.id.recylerMedicalAid);
 
-
-        List<MedicalAid> aids = MedicalAidDBAdapter.getAll(context);
+        List<MedicalAid> aids = MedicalAidDBAdapter.getAssigned(true,context);
 
         if(aids == null || aids.isEmpty()){
 
@@ -72,14 +76,28 @@ public class MedicalAidActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_medical_aid, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 break;
+            case R.id.action_add_medical_aid:
+                //TODO Code to add medical aid
+                startActivity(new Intent(context,MedicalAidSelection.class));
+                break;
         }
         return true;
     }
+
+
+
 
     private void setupRecyclerView(){
         adapter = new MedicalAidAdapter(this,data);

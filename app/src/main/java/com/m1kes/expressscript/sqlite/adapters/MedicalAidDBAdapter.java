@@ -9,6 +9,7 @@ import android.net.Uri;
 import com.m1kes.expressscript.objects.MedicalAid;
 import com.m1kes.expressscript.sqlite.DBContentProvider;
 import com.m1kes.expressscript.sqlite.tables.MedicalAidTable;
+import com.m1kes.expressscript.utils.CoreUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,11 @@ public class MedicalAidDBAdapter {
 
                 int id = cursor.getInt(cursor.getColumnIndex(MedicalAidTable.ID));
                 String name = cursor.getString(cursor.getColumnIndex (MedicalAidTable.NAME));
+                boolean assigned = CoreUtils.toBoolean(cursor.getInt(cursor.getColumnIndex(MedicalAidTable.ASSIGNED)));
 
                 item.setId(id);
                 item.setName(name);
+                item.setAssigned(assigned);
 
                 System.out.println("Loading from DB: "+item.toString());
 
@@ -44,13 +47,45 @@ public class MedicalAidDBAdapter {
         return data;
     }
 
+    public static List<MedicalAid> getAssigned(boolean isAssigned, Context context){
+
+        List<MedicalAid> data = new ArrayList<>();
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor = cr.query (DBContentProvider.MEDICAL_AID_URI , null, null, null, null);
+
+        if(cursor == null || cursor.getCount() < 1) return data;
+
+        while (cursor.moveToNext()) {
+            // Gets the value from the column.
+            MedicalAid item = new MedicalAid();
+
+            int id = cursor.getInt(cursor.getColumnIndex(MedicalAidTable.ID));
+            String name = cursor.getString(cursor.getColumnIndex (MedicalAidTable.NAME));
+            boolean assigned = CoreUtils.toBoolean(cursor.getInt(cursor.getColumnIndex(MedicalAidTable.ASSIGNED)));
+
+            if(isAssigned != assigned)continue;
+
+            item.setId(id);
+            item.setName(name);
+            item.setAssigned(assigned);
+
+            System.out.println("Loading from DB: "+item.toString());
+
+            data.add(item);
+        }
+
+        cursor.close();
+
+        return data;
+    }
+
 
     public static void add(MedicalAid item, Context context) {
 
         ContentValues initialValues = new ContentValues();
         initialValues.put(MedicalAidTable.ID, item.getId());
         initialValues.put(MedicalAidTable.NAME, item.getName());
-
+        initialValues.put(MedicalAidTable.ASSIGNED,CoreUtils.toInt(item.isAssigned()));
 
         System.out.println("Adding Bay : "+item.toString());
         Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI, MedicalAidTable.TABLE_NAME);

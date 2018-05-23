@@ -51,7 +51,7 @@ public class SendQuotation extends AppCompatActivity {
     private void initView(){
 
         try {
-            String file = (String) getIntent().getStringExtra(CreateQuotation.KEY_INTENT_IMAGE);
+            String file = getIntent().getStringExtra(CreateQuotation.KEY_INTENT_IMAGE);
             if(file == null ) finish();
 
             Bitmap image = CoreUtils.fetchFile(file,context);
@@ -142,14 +142,15 @@ public class SendQuotation extends AppCompatActivity {
                             return;
                         }
 
-                        params.put("ClientId",ClientIDManager.getClientID(context)+"");
+                        String clientid = ClientIDManager.getClientID(context)+"";
+                        params.put("ClientId",clientid);
                         params.put("ImageBytes",encoded);
 
                         System.out.println("Params :");
                         System.out.println("ClientId : "+ClientIDManager.getClientID(context)+"");
                         System.out.println("ImageBytes : " + encoded);
 
-                        webPost.execute(EndPoints.API_URL + EndPoints.API_CREATE_QUOTE_IMAGE ,params);
+                        webPost.execute(EndPoints.API_URL + EndPoints.API_CREATE_QUOTE_IMAGE + "/" + clientid,params);
 
                     }
                 }, 1000);

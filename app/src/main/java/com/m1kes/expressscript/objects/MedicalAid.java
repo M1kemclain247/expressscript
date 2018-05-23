@@ -8,6 +8,7 @@ public class MedicalAid implements Serializable{
 
     private int id;
     private String name;
+    private boolean assigned;
 
     public MedicalAid() {
     }
@@ -33,6 +34,14 @@ public class MedicalAid implements Serializable{
         this.name = name;
     }
 
+    public boolean isAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(boolean assigned) {
+        this.assigned = assigned;
+    }
+
     public static MedicalAid fromJsonObject(JSONObject map) {
 
         int id = ((Long) map.get("Id")).intValue();
@@ -47,9 +56,7 @@ public class MedicalAid implements Serializable{
         return "MedicalAid{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", assigned=" + assigned +
                 '}';
     }
-
-
-
 }

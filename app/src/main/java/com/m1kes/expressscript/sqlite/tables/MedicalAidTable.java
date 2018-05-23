@@ -11,14 +11,15 @@ public class MedicalAidTable {
 
     public static final String ID = "id";
     public static final String NAME = "name";
-    public static final String USER_ID = "user_id";
+    public static final String ASSIGNED = "asssigned";
 
     // Database creation SQL statement
     private static final String TABLE_CREATE = "create table "
             + TABLE_NAME
             + "("
             + ID + " INTEGER PRIMARY KEY, "
-            + NAME + " TEXT NOT NULL "
+            + NAME + " TEXT NOT NULL ,"
+            + ASSIGNED + "INTEGER NOT NULL"
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {

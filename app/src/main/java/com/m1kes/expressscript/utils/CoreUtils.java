@@ -209,5 +209,25 @@ public class CoreUtils {
         return Integer.parseInt(b.toString());
     }
 
+    /**
+     * converts an intger value to a boolean value 1 = true  0 = false
+     * @param intValue
+     * @return
+     */
+    public static boolean toBoolean(int intValue){
+        return intValue == 1;
+    }
+
+    /**
+     * converts an boolean value to a int value 1 = true  0 = false
+     * @param value
+     * @return
+     */
+
+    public static int toInt(boolean value) {
+        // Convert true to 1 and false to 0.
+        return value ? 1 : 0;
+    }
+
 }
 
