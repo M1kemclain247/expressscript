@@ -46,31 +46,8 @@ public class MedicalAidActivity extends AppCompatActivity {
 
         List<MedicalAid> aids = MedicalAidDBAdapter.getAssigned(true,context);
 
-        if(aids == null || aids.isEmpty()){
-
-            WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
-                @Override
-                public void onSuccess(String response) {
-
-                    data = MedicalAidJsonParser.getMedicalAid(response);
-                    //Setup persistant storage
-                    MedicalAidDBAdapter.refill(data,context);
-
-                    setupRecyclerView();
-                    Toast.makeText(context,"Updated Successfully!",Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onFailed() {
-                    Toast.makeText(context,"Unable to connect, check your Internet Connection!",Toast.LENGTH_LONG).show();
-                }
-            });
-
-            request.execute(EndPoints.API_URL + EndPoints.URL_MEDICAL_AID + ClientIDManager.getClientID(context));
-
-        }else{
+        if(aids != null && !aids.isEmpty())
             this.data = aids;
-        }
 
         setupRecyclerView();
     }
@@ -95,9 +72,6 @@ public class MedicalAidActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
-
 
     private void setupRecyclerView(){
         adapter = new MedicalAidAdapter(this,data);

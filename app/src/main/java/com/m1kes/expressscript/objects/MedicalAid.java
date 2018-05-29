@@ -44,6 +44,8 @@ public class MedicalAid implements Serializable{
 
     public static MedicalAid fromJsonObject(JSONObject map) {
 
+        if(map == null)return null;
+
         int id = ((Long) map.get("Id")).intValue();
         String name = (String) map.get("Name");
 
