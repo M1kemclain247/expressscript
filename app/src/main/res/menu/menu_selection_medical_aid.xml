@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/action_assign_aid"
-        android:icon="@drawable/file_plus"
+        android:icon="@drawable/check"
+        android:iconTint="@color/green"
         android:title=""
         app:showAsAction="always"/>
 </menu>

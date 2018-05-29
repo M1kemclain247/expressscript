@@ -20,6 +20,8 @@
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
 
+    <color name="green">#68ba4c</color>
+
     <color name="colorMenuCards">#0091ea</color>
 
 </resources>

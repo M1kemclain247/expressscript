@@ -1,5 +1,6 @@
 package com.m1kes.expressscript;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.m1kes.expressscript.adapters.recyclerview.MedicalAidAdapter;
@@ -16,6 +18,7 @@ import com.m1kes.expressscript.adapters.recyclerview.decoration.RecyclerItemDivi
 import com.m1kes.expressscript.adapters.recyclerview.medicalaids.SelectableMedicalAid;
 import com.m1kes.expressscript.adapters.recyclerview.medicalaids.adapters.SelectableMedicalAidAdapter;
 import com.m1kes.expressscript.adapters.recyclerview.medicalaids.objects.SelectableMedicalAidViewHolder;
+import com.m1kes.expressscript.dialogs.fragments.AssignMedicalAidFragment;
 import com.m1kes.expressscript.objects.MedicalAid;
 import com.m1kes.expressscript.sqlite.adapters.MedicalAidDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
@@ -29,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MedicalAidSelection extends AppCompatActivity implements SelectableMedicalAidViewHolder.OnItemSelectedListener {
+public class MedicalAidSelection extends AppCompatActivity implements SelectableMedicalAidViewHolder.OnItemSelectedListener , AssignMedicalAidFragment.ClickListener {
 
     private Context context;
 
@@ -99,17 +102,55 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
                 finish();
                 break;
             case R.id.action_assign_aid :
-
+                assignMedicalAid();
                 break;
         }
         return true;
     }
 
+    public void assignMedicalAid(){
+        AssignMedicalAidFragment dialog = new AssignMedicalAidFragment();
+        dialog.show(getFragmentManager(), "AssignMedicalAid");
+    }
+
+
+    @Override
+    public void positiveClick(DialogFragment dialog, EditText editText) {
+
+        String medicalAidNo = editText.getText().toString();
+        Toast.makeText(context,"Medical Aid No :" + medicalAidNo,Toast.LENGTH_SHORT).show();
+        dialog.dismiss();
+
+
+        WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
+            @Override
+            public void onSuccess(String response) {
+                Toast.makeText(context,"Assigned Medical Aid Successfully!",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailed() {
+                Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        request.execute(EndPoints.API_URL + EndPoints.API_ASSIGN_MEDICAL_AID + ClientIDManager.getClientID(context) + "/" + current.getId() + "/" + medicalAidNo);
+
+        finish();
+    }
+
+    @Override
+    public void negativeClick(DialogFragment dialog) {
+        Toast.makeText(context,"Cancelled !",Toast.LENGTH_SHORT).show();
+        dialog.dismiss();
+    }
+
+
+    private SelectableMedicalAid current;
+
     @Override
     public void onItemSelected(SelectableMedicalAid item) {
-        List<MedicalAid> selectedItems = adapter.getSelectedItems();
-        Snackbar.make(recyclerView,"Selected item is "+item.getName()+
-                ", Totally  selectem item count is "+selectedItems.size(),Snackbar.LENGTH_LONG).show();
-
+        current = item;
+        Snackbar.make(recyclerView,"Selected " + item.getName() ,Snackbar.LENGTH_LONG).show();
     }
 }
