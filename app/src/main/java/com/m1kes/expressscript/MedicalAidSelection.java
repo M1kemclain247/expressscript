@@ -59,6 +59,10 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
 
 
                 data = MedicalAidJsonParser.getMedicalAid(response);
+                if(data == null || data.isEmpty()){
+                    Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 //Setup persistant storage
                 MedicalAidDBAdapter.refill(data,context);
 

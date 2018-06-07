@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "express_script.db";
     private static String DATABASE_PATH = "";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static Context context;
 
 

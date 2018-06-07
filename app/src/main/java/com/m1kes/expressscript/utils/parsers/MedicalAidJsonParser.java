@@ -27,6 +27,7 @@ public class MedicalAidJsonParser {
 
         } catch (ParseException e) {
             e.printStackTrace();
+            return null;
         }
         return medicalAids;
     }

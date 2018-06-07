@@ -5,7 +5,9 @@ public class EndPoints {
     public static final String UPLOAD_URL = ROOT_URL + "uploadpic";
     public static final String GET_PICS_URL = ROOT_URL + "getpics";
 
-    public static final String API_URL = "http://196.27.115.46:9002/";
+   // public static final String API_URL = "http://196.27.115.46:9002/";
+
+    public static final String API_URL = "http://10.29.8.36:9696/";
 
     public static final String URL_MEDICAL_AID = "api/MedicalAids/GetAll/";
     public static final String API_ASSIGN_MEDICAL_AID = "api/Client/AddMedicalAid/";
