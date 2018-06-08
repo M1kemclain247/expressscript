@@ -17,7 +17,7 @@ public class MessageTable {
     private static final String TABLE_CREATE = "create table "
             + TABLE_NAME
             + "("
-            + ID + " INTEGER PRIMARY KEY, "
+            + ID + " INTEGER NOT NULL, "
             + CONTENT + " TEXT NOT NULL, "
             + SENDER + " TEXT NOT NULL, "
             + DATE + " DOUBLE NOT NULL "

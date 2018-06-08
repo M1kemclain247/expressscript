@@ -21,12 +21,15 @@ import com.m1kes.expressscript.adapters.recyclerview.medicalaids.objects.Selecta
 import com.m1kes.expressscript.dialogs.fragments.AssignMedicalAidFragment;
 import com.m1kes.expressscript.objects.MedicalAid;
 import com.m1kes.expressscript.sqlite.adapters.MedicalAidDBAdapter;
+import com.m1kes.expressscript.sqlite.adapters.UserMedicalAidDBAdapter;
+import com.m1kes.expressscript.sqlite.tables.UserMedicalAid;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
 import com.m1kes.expressscript.utils.parsers.MedicalAidJsonParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,21 +53,26 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
         this.context = this;
         CoreUtils.setupActionBar("Assign Medical Aid",this);
 
-        this.data = MedicalAidDBAdapter.getAssigned(false,context);
-
+        this.data = MedicalAidDBAdapter.getAll(context);
 
         WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
             @Override
             public void onSuccess(String response) {
-
-
-                data = MedicalAidJsonParser.getMedicalAid(response);
-                if(data == null || data.isEmpty()){
+               List<MedicalAid> items = MedicalAidJsonParser.getMedicalAid(response);
+                if(items == null || items.isEmpty()){
                     Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                //Setup persistant storage
-                MedicalAidDBAdapter.refill(data,context);
+
+                if(data.isEmpty()) {
+                    //Setup persistant storage
+                    MedicalAidDBAdapter.refill(items, context);
+                }else{
+                    //Just update the new records.
+                    for(MedicalAid aid : data){
+                        MedicalAidDBAdapter.update(aid,context);
+                    }
+                }
 
                 setupRecyclerView();
                 Toast.makeText(context,"Updated Successfully!",Toast.LENGTH_LONG).show();
@@ -81,8 +89,8 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
     }
 
 
-
     private void setupRecyclerView(){
+
         adapter = new SelectableMedicalAidAdapter(this,data,true,context);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -121,10 +129,16 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
     @Override
     public void positiveClick(DialogFragment dialog, EditText editText) {
 
+        if(current == null){
+            Toast.makeText(context,"An error occured!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String medicalAidNo = editText.getText().toString();
         Toast.makeText(context,"Medical Aid No :" + medicalAidNo,Toast.LENGTH_SHORT).show();
         dialog.dismiss();
 
+        MedicalAidDBAdapter.update(new MedicalAid(current.getId(),current.getName(),true),context);
 
         WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
             @Override
@@ -140,7 +154,10 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
 
         request.execute(EndPoints.API_URL + EndPoints.API_ASSIGN_MEDICAL_AID + ClientIDManager.getClientID(context) + "/" + current.getId() + "/" + medicalAidNo);
 
+        System.out.println("Finishing Activity!");
+        finishActivity(MedicalAidActivity.REQUEST_ASSIGNED);
         finish();
+
     }
 
     @Override

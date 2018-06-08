@@ -6,6 +6,8 @@ import android.os.Parcelable;
 
 import com.m1kes.expressscript.objects.custom.CustomDate;
 
+import org.json.simple.JSONObject;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,6 +59,18 @@ public class Message implements Parcelable{
 
     public CustomDate getDate() {
         return date;
+    }
+
+    public static Message fromJsonObject(JSONObject map) {
+
+        if(map == null)return null;
+
+        int id = ((Long) map.get("Id")).intValue();
+        String message = (String) map.get("Message");
+        String sender = "Server";
+
+        return new Message(id, message,sender,new CustomDate());
+
     }
 
     public Message(Parcel in) {

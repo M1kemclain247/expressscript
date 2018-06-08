@@ -18,6 +18,12 @@ public class MedicalAid implements Serializable{
         this.name = name;
     }
 
+    public MedicalAid(int id, String name,boolean assigned) {
+        this.id = id;
+        this.name = name;
+        this.assigned = assigned;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,13 +1,17 @@
 package com.m1kes.expressscript;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +25,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.m1kes.expressscript.recievers.CheckMessagesReciever;
+import com.m1kes.expressscript.recievers.UpdateMedicalAidReciever;
+import com.m1kes.expressscript.service.UpdateMedicalAidService;
 import com.m1kes.expressscript.storage.ClientIDManager;
 
 import java.util.ArrayList;
@@ -35,13 +42,9 @@ public class SplashScreen extends AppCompatActivity {
 
     final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     private static final String TAG = "SplashScreen";
-
-    @BindView(R.id.btnRetryUpdate)
-    Button retryUpdateBtn;
-    @BindView(R.id.txtUpdateDetails)
-    TextView updateDetails;
+    @BindView(R.id.btnRetryUpdate) Button retryUpdateBtn;
+    @BindView(R.id.txtUpdateDetails) TextView updateDetails;
     @BindView(R.id.image)KenBurnsView img;
-
     private Context context;
 
     @Override
@@ -66,8 +69,34 @@ public class SplashScreen extends AppCompatActivity {
         Glide.with(context)
                 .load(R.drawable.woman_design)
                 .into(img);
+
+        scheduleAlarm();
     }
 
+    public void scheduleAlarm() {
+
+        //Check for messages
+        Intent intent = new Intent(getApplicationContext(), CheckMessagesReciever.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, CheckMessagesReciever.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //Check for updates to medical Aid
+        Intent update_medical_aid = new Intent(getApplicationContext(), UpdateMedicalAidService.class);
+        final PendingIntent pendingUpdateAid = PendingIntent.getBroadcast(this, UpdateMedicalAidReciever.REQUEST_CODE,
+                update_medical_aid, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long firstMillis = System.currentTimeMillis();
+
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        if(alarm == null)return;
+
+        //Set alarms
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pIntent);
+
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingUpdateAid);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

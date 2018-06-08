@@ -94,6 +94,27 @@ public class MedicalAidDBAdapter {
         System.out.println("Added A Bay Successfully");
     }
 
+
+    public static int update(MedicalAid aid,Context context){
+
+        ContentValues values = new ContentValues();
+        values.put(MedicalAidTable.ID, aid.getId());
+        values.put(MedicalAidTable.NAME, aid.getName());
+        values.put(MedicalAidTable.ASSIGNED,CoreUtils.toInt(aid.isAssigned()));
+
+        Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI,MedicalAidTable.TABLE_NAME);
+
+        System.out.println("Updating record using id :  " + aid.getId());
+        int rowsAffected =  context.getContentResolver().update(contentUri,values,
+                MedicalAidTable.ID+"=?",
+                new String[]{aid.getId() + ""});
+
+        System.out.println("Updated Rows: "+ rowsAffected);
+
+        return rowsAffected;
+    }
+
+
     private static void deleteAll(Context context){
 
         Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI, MedicalAidTable.TABLE_NAME);

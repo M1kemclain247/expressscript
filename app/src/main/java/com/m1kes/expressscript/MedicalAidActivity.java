@@ -43,12 +43,6 @@ public class MedicalAidActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         context = this;
         CoreUtils.setupActionBar("Medical Aid",this);
-
-        List<MedicalAid> aids = MedicalAidDBAdapter.getAssigned(true,context);
-
-        if(aids != null && !aids.isEmpty())
-            this.data = aids;
-
         setupRecyclerView();
     }
 
@@ -59,6 +53,8 @@ public class MedicalAidActivity extends AppCompatActivity {
         return true;
     }
 
+    public static final int REQUEST_ASSIGNED = 45;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -67,19 +63,36 @@ public class MedicalAidActivity extends AppCompatActivity {
                 break;
             case R.id.action_add_medical_aid:
                 //TODO Code to add medical aid
-                startActivity(new Intent(context,MedicalAidSelection.class));
+                Intent i = new Intent(context,MedicalAidSelection.class);
+                startActivityForResult(i,REQUEST_ASSIGNED);
                 break;
         }
         return true;
     }
 
     private void setupRecyclerView(){
-        adapter = new MedicalAidAdapter(this,data);
+        List<MedicalAid> aids = MedicalAidDBAdapter.getAssigned(true,context);
+        if(aids == null || aids.isEmpty())return;
+
+        System.out.println("Size of Assigned Medical Aids : " + aids.size());
+
+        adapter = new MedicalAidAdapter(this,aids);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new RecyclerItemDivider(this));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("Just picked up activity finished");
+        // Check which request we're responding to
+        if (requestCode == REQUEST_ASSIGNED) {
+            System.out.println("This is the correct Request code");
+                    setupRecyclerView();
+
+        }
     }
 
 }

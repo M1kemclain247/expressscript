@@ -7,7 +7,7 @@ import android.util.Log;
 public class MedicalAidTable {
 
     // Database table
-    public static final String TABLE_NAME = "user_medical_aids";
+    public static final String TABLE_NAME = "medical_aids";
 
     public static final String ID = "id";
     public static final String NAME = "name";

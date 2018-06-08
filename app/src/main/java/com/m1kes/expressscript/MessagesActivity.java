@@ -1,6 +1,9 @@
 package com.m1kes.expressscript;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,11 +22,15 @@ import android.widget.Toast;
 import com.m1kes.expressscript.adapters.recyclerview.MessageAdapter;
 import com.m1kes.expressscript.objects.Message;
 import com.m1kes.expressscript.objects.custom.CustomDate;
+import com.m1kes.expressscript.recievers.CheckMessagesReciever;
+import com.m1kes.expressscript.sqlite.adapters.MedicalAidDBAdapter;
 import com.m1kes.expressscript.sqlite.adapters.MessagesDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
+import com.m1kes.expressscript.utils.parsers.MedicalAidJsonParser;
+import com.m1kes.expressscript.utils.parsers.MessageJsonParser;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -79,7 +86,51 @@ public class MessagesActivity extends AppCompatActivity {
 
         setupRecyclerView();
 
+
+        checkMessages();
     }
+
+    public void checkMessages(){
+
+        WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
+            @Override
+            public void onSuccess(String response) {
+
+
+                List<Message> new_content = MessageJsonParser.getMessages(response);
+                if(new_content == null ){
+                    Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                for(Message m : new_content){
+                    boolean exist = false;
+                    for(Message compareTo : data){
+                        if(m.getContent().equalsIgnoreCase(compareTo.getContent())) exist = true;
+                    }
+
+                    if(!exist) {
+                        MessagesDBAdapter.add(m, context);
+                        data.add(m);
+                    }
+                }
+
+                setupRecyclerView();
+                Toast.makeText(context,"Updated Successfully!",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailed() {
+                Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        request.execute(EndPoints.API_URL + EndPoints.API_GET_ALL_MESSAGES + ClientIDManager.getClientID(context));
+
+
+
+    }
+
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -166,9 +217,6 @@ public class MessagesActivity extends AppCompatActivity {
                                     if(status.equalsIgnoreCase("success")){
 
                                         int id = Integer.parseInt(id_Str);
-
-                                        MessagesDBAdapter.add(new Message(id,"Thank you for contacting us!","HelpDesk",new CustomDate()),context);
-
                                         updateRecycler();
                                         Toast.makeText(context,"Message has been sent!",Toast.LENGTH_LONG).show();
                                     }else{

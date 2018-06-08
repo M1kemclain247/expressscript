@@ -109,7 +109,7 @@ public class SelectableMedicalAidAdapter extends RecyclerView.Adapter implements
                     selectableItem.setSelected(false);
                 } else if (selectableItem.equals(item)
                         && item.isSelected()) {
-                    selectableItem.setSelected(true);
+
                 }
             }
             notifyDataSetChanged();

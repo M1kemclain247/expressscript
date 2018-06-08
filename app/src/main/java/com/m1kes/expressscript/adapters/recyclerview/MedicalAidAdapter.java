@@ -84,12 +84,12 @@ public class MedicalAidAdapter extends RecyclerView.Adapter<MedicalAidAdapter.Re
                     @Override
                     public void onClick(View v) {
 
-                        MedicalAid aid =  data.get(getAdapterPosition());
+                   /*     MedicalAid aid =  data.get(getAdapterPosition());
                         if(aid == null)return;
 
                         Intent i = new Intent(finalContext, ViewMedicalAid.class);
                         i.putExtra(KEY_INTENT,aid);
-                        finalContext.startActivity(i);
+                        finalContext.startActivity(i);*/
                     }
                 });
             }
