@@ -13,11 +13,13 @@ import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
 
+import org.json.JSONException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -52,24 +54,31 @@ public class Quotes extends AppCompatActivity {
 
 
                 try {
-                    Object obj = new JSONParser().parse(response);
+                    Object jsonArrayy = new JSONParser().parse(response);
 
-                    JSONObject jsonResponse = (JSONObject) obj;
-                    int productId = Integer.parseInt ((String) jsonResponse.get("ProductId"));
-                    String description = ((String) jsonResponse.get("Description"));
-                    double unit_price = ((Long) jsonResponse.get("UnitPrice")).doubleValue();
-                    int quantity = Integer.parseInt ((String) jsonResponse.get("Quantity"));
-                    double total_price = ((Long) jsonResponse.get("Total")).doubleValue();
+                    JSONArray jsonResponse = (JSONArray) jsonArrayy;
 
-                    Product product = new Product();
+                    for(int i = 0; i < jsonResponse.size(); i++){
+                         JSONObject obj =  (JSONObject)jsonResponse.get(i);
 
-                    product.setId(productId);
-                    product.setDescription(description);
-                    product.setUnit_price(unit_price);
-                    product.setQuantity(quantity);
-                    product.setTotal_price(total_price);
+                        int productId = ((Long) obj.get("ProductId")).intValue();
+                        String description = ((String) obj.get("Description"));
+                        double unit_price = ((Double) obj.get("UnitPrice"));
+                        int quantity = ((Double) obj.get("Quantity")).intValue();
+                        double total_price = ((Double) obj.get("Total"));
 
-                    ProductsDBAdapter.update(product,context);
+                        Product product = new Product();
+
+                        product.setId(productId);
+                        product.setDescription(description);
+                        product.setUnit_price(unit_price);
+                        product.setQuantity(quantity);
+                        product.setTotal_price(total_price);
+
+                        ProductsDBAdapter.update(product,context);
+                        System.out.println("Updated a product");
+                    }
+
                     Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
 
                 } catch (ParseException e) {

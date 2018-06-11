@@ -20,10 +20,10 @@ public class ProductsTable {
             + "("
             + ID + " INTEGER PRIMARY KEY, "
             + PRODUCT_ID + " INTEGER NOT NULL ,"
-            + DESCRIPTION + " TEXT NOT NULL ,"
-            + UNIT_PRICE + " REAL NOT NULL ,"
-            + QUANTITY + " INTEGER NOT NULL ,"
-            + TOTAL + " REAL NOT NULL "
+            + DESCRIPTION + " TEXT ,"
+            + UNIT_PRICE + " REAL ,"
+            + QUANTITY + " INTEGER ,"
+            + TOTAL + " REAL "
             + ");";
 
     public static void onCreate(SQLiteDatabase database) {
