@@ -11,10 +11,16 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.m1kes.expressscript.objects.Product;
+import com.m1kes.expressscript.sqlite.adapters.ProductsDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -98,7 +104,20 @@ public class CreateTextQuotation extends AppCompatActivity {
                             @Override
                             public void onSuccess(String response) {
                                 System.out.println("Response is : " + response);
-                                Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
+                                try {
+                                    Object obj = new JSONParser().parse(response);
+
+                                    JSONObject jsonResponse = (JSONObject) obj;
+                                    int id = Integer.parseInt ((String) jsonResponse.get("Message"));
+
+
+                                    ProductsDBAdapter.add(new Product(id),context);
+                                    Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
+
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
 
                             @Override

@@ -9,6 +9,7 @@ public class EndPoints {
 
     public static final String API_URL = "http://10.29.8.36:9696/";
 
+    public static final String API_CHECK_QUOTE = "api/Transaction/GetQuoteStatus/";
     public static final String URL_MEDICAL_AID = "api/MedicalAids/GetAll/";
     public static final String API_ASSIGN_MEDICAL_AID = "api/Client/AddMedicalAid/";
     public static final String API_SIGNUP_URL = "api/Client/Register";

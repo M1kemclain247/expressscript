@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 
 import com.m1kes.expressscript.sqlite.tables.MedicalAidTable;
 import com.m1kes.expressscript.sqlite.tables.MessageTable;
+import com.m1kes.expressscript.sqlite.tables.ProductsTable;
 import com.m1kes.expressscript.sqlite.tables.UserMedicalAid;
 
 
@@ -29,6 +30,9 @@ public class DBContentProvider extends ContentProvider {
 
     public static final Uri MESSAGES_URI = Uri.parse("content://" + AUTHORITY
             + "/" + MessageTable.TABLE_NAME);
+
+    public static final Uri PRODUCTS_URI = Uri.parse("content://" + AUTHORITY
+            + "/" + ProductsTable.TABLE_NAME);
 
     private SQLiteDatabase db;
 
