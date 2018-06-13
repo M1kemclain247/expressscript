@@ -37,6 +37,8 @@ public class CheckMessagesService extends IntentService {
 
         Log.i(LOG_TAG, "Service is Running");
 
+        if(ClientIDManager.getClientID(getApplicationContext()) == 0)return;
+
 
         WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
             @Override
