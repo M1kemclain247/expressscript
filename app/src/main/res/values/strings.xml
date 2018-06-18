@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ExpressScript</string>
+    <string name="app_name_2">OnPoint Pharmacy</string>
+    <string name="health_tip"> Don’t skip breakfast.
+        Studies show that eating a proper breakfast is one of the most positive things you
+        can do if you are trying to lose weight. Breakfast skippers tend to gain weight.
+        A balanced breakfast includes fresh fruit or fruit juice, a high-fibre breakfast cereal,
+        low-fat milk or yoghurt, wholewheat toast, and a boiled egg.  </string>
+
 </resources>

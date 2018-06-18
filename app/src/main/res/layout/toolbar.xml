@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cabs_custom_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@android:color/white"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/toolbar_back_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="12dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_back"
+            android:tint="#8aff05"/>
+
+        <TextView
+            android:id="@+id/toolbar_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Home"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:id="@+id/toolbar_drawer_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_app_draw"
+            android:tint="#8aff05"
+            android:clickable="true"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>

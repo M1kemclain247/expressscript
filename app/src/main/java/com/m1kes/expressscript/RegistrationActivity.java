@@ -248,7 +248,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setResult(RESULT_OK, null);
         finish();
 
-        startActivity(new Intent(context,MainMenuActivity.class));
+        startActivity(new Intent(context,MenuActivity.class));
     }
 
     public void onSignupFailed() {

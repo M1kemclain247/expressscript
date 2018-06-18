@@ -1,0 +1,113 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+
+    >
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="22sp"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:text="Request Qoute"
+            android:paddingTop="1dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/side_nav_bar"
+
+            android:textAlignment="center"/>
+        <TextView
+            android:id="@+id/pin_change_label_textview"
+            android:textAlignment="center"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_height="wrap_content"
+            android:padding ="10dp"
+            android:text="Request Quotation" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Selct Age Group"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/category_spinner"
+            style="@style/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:minHeight="40dp"
+            android:spinnerMode="dropdown"
+            android:popupElevation="20dp"
+            android:popupBackground="@color/colorPrimary"
+            android:layout_alignTop="@+id/imageView3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Select Drug"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/produce_spinner"
+            style="@style/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:minHeight="40dp"
+            android:spinnerMode="dropdown"
+            android:popupElevation="20dp"
+            android:popupBackground="@color/colorPrimary"
+            android:layout_alignTop="@+id/imageView3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingBottom="10dp"
+            android:text="Select Location"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/province_spinner"
+            style="@style/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:minHeight="40dp"
+            android:spinnerMode="dropdown"
+            android:popupElevation="20dp"
+            android:popupBackground="@color/primaryGreen"
+            android:layout_alignTop="@+id/imageView3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <Button
+            android:id="@+id/pinchange_submit_button"
+            style="@style/primaryBtn"
+            android:layout_marginTop="10dp"
+            android:text="Ask" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,153 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        style="@style/fragmentHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      android:layout_gravity="center"
+        android:text="Connect With Us" />
+
+
+    <!-- Facebook -->
+    <LinearLayout
+        android:id="@+id/connect_facebook_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/icon_facebook" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/connect_facebook_title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:text="Facebook"
+                android:textAllCaps="true"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/connect_facebook_description_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/connect_facebook_title_textview"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="12dp"
+                android:hint="Like us on Facebook" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/facebook_seperator"
+        style="@style/dottedSeperator"
+        android:layout_marginTop="15dp" />
+
+    <!-- Linkedin -->
+    <LinearLayout
+        android:id="@+id/connect_linkedin_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/icon_twitter" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/connect_linkedin_title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:text="LinkedIn"
+                android:textAllCaps="true"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/connect_linkedin_description_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/connect_linkedin_title_textview"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="12dp"
+                android:hint="Follow us on Twitter" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/linkedin_seperator"
+        style="@style/dottedSeperator"
+        android:layout_marginTop="10dp" />
+
+    <!-- Youtube -->
+    <LinearLayout
+        android:id="@+id/connect_youtube_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/icon_skype" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/connect_youtube_title_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="4dp"
+                android:text="Skype"
+                android:textAllCaps="true"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/connect_youtube_description_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/connect_youtube_title_textview"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="12dp"
+                android:hint="Talk to us on Skype" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/youtube_seperator"
+        style="@style/dottedSeperator"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>

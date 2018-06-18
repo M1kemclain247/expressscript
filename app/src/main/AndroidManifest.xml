@@ -14,9 +14,11 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -52,30 +54,31 @@
         <activity android:name=".Quotes" />
         <activity android:name=".SendQuotation" />
         <activity android:name=".CreateTextQuotation" />
-        <activity android:name=".MedicalAidSelection"></activity>
-
+        <activity android:name=".MedicalAidSelection" />
 
         <receiver
             android:name=".recievers.CheckMessagesReciever"
-            android:process=":remote" >
+            android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".recievers.UpdateMedicalAidReciever"
-            android:process=":remote" >
-        </receiver>
+            android:process=":remote"></receiver>
 
         <service
-        android:name=".service.CheckMessagesService"
-        android:exported="false" />
-
+            android:name=".service.CheckMessagesService"
+            android:exported="false" />
         <service
             android:name=".service.UpdateMedicalAidService"
             android:exported="false" />
 
+        <activity android:name=".MenuActivity"></activity>
+
+
+        <meta-data android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyChhvKnXfPS6Hw1wU55eZzDjucz6tV90qA" />
     </application>
 
 </manifest>

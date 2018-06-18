@@ -22,4 +22,18 @@
     <dimen name="slide_title">30dp</dimen>
     <dimen name="slide_desc">16dp</dimen>
     <dimen name="desc_padding">40dp</dimen>
+
+
+    <dimen name="primary_button_top_margin">6dp</dimen>
+    <dimen name="edittext_top_margin">4dp</dimen>
+
+
+    <!-- Map info window -->
+    <dimen name="map_info_window_padding">10dp</dimen>
+    <dimen name="map_info_min_width">150dp</dimen>
+    <dimen name="map_info_max_width">280dp</dimen>
+    <dimen name="map_info_text_size">9sp</dimen>
+    <dimen name="map_info_title_text_size">12sp</dimen>
+    <dimen name="map_markers_padding">50dp</dimen>
+    <dimen name="marker_pading">50dp</dimen>
 </resources>
