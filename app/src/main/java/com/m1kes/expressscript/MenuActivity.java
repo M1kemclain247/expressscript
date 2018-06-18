@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.m1kes.expressscript.adapters.menu.DefaultListMenuFragment;
 import com.m1kes.expressscript.adapters.menu.RightDrawerListAdapter;
 import com.m1kes.expressscript.fragments.ContactsFragment;
+import com.m1kes.expressscript.fragments.CreateQuoteFragment;
 import com.m1kes.expressscript.fragments.HealthTipsFragment;
 import com.m1kes.expressscript.fragments.QuotesFragment;
 import com.m1kes.expressscript.fragments.RequestQuotesFragment;
@@ -143,8 +144,8 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
 
     protected AbstractListMenuFragment createLandingListMenu() {
         return new DefaultListMenuFragment().createMenus().showCabsHeading(true)
-                .addMenu(MenuId.CREATE_QUOTE_MENU,"Create Quote",
-                        "Request's a Quote", R.drawable.cart_plus)
+                .addMenu(MenuId.CREATE_QUOTE_MENU,"Request a Quote",
+                        "Capture prescription details using Camera, Picture or Text", R.drawable.cart_plus)
                 .addMenu(MenuId.QUOTES_MENU, "Quotes",
                         "View all your Quotes", R.drawable.file_compare)
                 .addMenu(MenuId.ORDERS_MENU, "Orders",
@@ -210,7 +211,7 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
                 break;
             }
             case CREATE_QUOTE_MENU: {
-                startActivity(new Intent(MenuActivity.this,CreateQuotation.class));
+                replaceFragment(new CreateQuoteFragment(), MENU_FRAGMENT_TAG);
                 break;
             }
             case QUOTES_MENU: {

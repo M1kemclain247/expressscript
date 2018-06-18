@@ -7,4 +7,7 @@
         A balanced breakfast includes fresh fruit or fruit juice, a high-fibre breakfast cereal,
         low-fat milk or yoghurt, wholewheat toast, and a boiled egg.  </string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
