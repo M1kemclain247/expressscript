@@ -22,7 +22,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_medical"
+        android:icon="@mipmap/ic_launcher_on_point"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_on_point_round"
         android:supportsRtl="true"
