@@ -3,6 +3,7 @@ package com.m1kes.expressscript;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,6 +21,10 @@ import android.widget.TextView;
 
 import com.m1kes.expressscript.adapters.menu.DefaultListMenuFragment;
 import com.m1kes.expressscript.adapters.menu.RightDrawerListAdapter;
+import com.m1kes.expressscript.fragments.ContactsFragment;
+import com.m1kes.expressscript.fragments.HealthTipsFragment;
+import com.m1kes.expressscript.fragments.QuotesFragment;
+import com.m1kes.expressscript.fragments.RequestQuotesFragment;
 import com.m1kes.expressscript.objects.MenuId;
 import com.m1kes.expressscript.objects.MenuItem;
 import com.m1kes.expressscript.utils.extra.AbstractListMenuFragment;
@@ -39,6 +44,10 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
     private Toolbar toolbar;
     private TextView versionTextView;
     private RelativeLayout menuHeading;
+
+    public static String LANDING_FRAGMENT_TAG = "LANDING_MENU_FRAGMENT";
+    public static String MENU_FRAGMENT_TAG = "MENU_FRAGMENT";
+    public static String MAIN_MENU_FRAGMENT = "MAIN_MENU_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +84,7 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
         ImageView drawerIcon = findViewById(R.id.toolbar_drawer_icon);
 
 
-        //replaceFragment(createMainTranListMenu(), MAIN_MENU_FRAGMENT);
+       // replaceFragment(createMainTranListMenu(), MAIN_MENU_FRAGMENT);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         drawerIcon.setVisibility(View.VISIBLE);
 
@@ -94,6 +103,17 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
 
     }
 
+
+    public void replaceFragment(Fragment fragment, String tag) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(tag);
+
+        fragmentTransaction.commit();
+
+
+    }
 
     private void createNavigationDraw() {
 
@@ -207,33 +227,33 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
 
         switch (menuId) {
             case LANDING_MAIN_MENU:{
-               // replaceFragment(createLandingListMenu(), MENU_FRAGMENT_TAG);
+                replaceFragment(createLandingListMenu(), MENU_FRAGMENT_TAG);
                 break;
 
             }
             case REQUEST_QUOTES_MENU: {
-                //replaceFragment(new RequestQuotesFragment(), MENU_FRAGMENT_TAG);
+                replaceFragment(new RequestQuotesFragment(), MENU_FRAGMENT_TAG);
                 break;
             }
 
             case QUOTES_MENU: {
-               // replaceFragment(new QuotesFragment(), MENU_FRAGMENT_TAG);
+                replaceFragment(new QuotesFragment(), MENU_FRAGMENT_TAG);
                 break;
             }
 
             case BRANCH_LOCATOR: {
                 // replaceFragment(new BranchFragment(), MENU_FRAGMENT_TAG);
-              //  Intent locationIntent = new Intent(this,LocationActivity.class);
-             //   startActivity(locationIntent);
+               // Intent locationIntent = new Intent(this,LocationActivity.class);
+                //startActivity(locationIntent);
                 break;
             }
             case HEALTH_TIPS_MENU: {
-               // replaceFragment(new HealthTipsFragment(), MENU_FRAGMENT_TAG);
+                replaceFragment(new HealthTipsFragment(), MENU_FRAGMENT_TAG);
                 break;
             }
 
             case CONTACT_US_MENU: {
-               // replaceFragment(new ContactsFragment(), MENU_FRAGMENT_TAG);
+                replaceFragment(new ContactsFragment(), MENU_FRAGMENT_TAG);
                 break;
             }
 
