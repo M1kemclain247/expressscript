@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -31,9 +30,7 @@
         <activity
             android:name=".SplashScreen"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-
-        </activity>
+            android:theme="@style/SplashTheme"></activity>
         <activity android:name=".CreateQuotation" />
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".MainMenuActivity" />
@@ -61,7 +58,7 @@
         </receiver>
         <receiver
             android:name=".recievers.UpdateMedicalAidReciever"
-            android:process=":remote"/>
+            android:process=":remote" />
 
         <service
             android:name=".service.CheckMessagesService"
@@ -70,9 +67,9 @@
             android:name=".service.UpdateMedicalAidService"
             android:exported="false" />
 
-        <activity android:name=".MenuActivity"
-            android:theme="@style/AppThemeNoActionBar"
-            >
+        <activity
+            android:name=".MenuActivity"
+            android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -80,8 +77,11 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.google.android.maps.v2.API_KEY"
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyChhvKnXfPS6Hw1wU55eZzDjucz6tV90qA" />
+
+        <activity android:name=".BranchNavigatorActivity"></activity>
     </application>
 
 </manifest>

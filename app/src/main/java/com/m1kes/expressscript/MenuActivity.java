@@ -42,12 +42,10 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
-    private TextView versionTextView;
     private RelativeLayout menuHeading;
 
     public static String LANDING_FRAGMENT_TAG = "LANDING_MENU_FRAGMENT";
     public static String MENU_FRAGMENT_TAG = "MENU_FRAGMENT";
-    public static String MAIN_MENU_FRAGMENT = "MAIN_MENU_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +54,6 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
 
         createActionBar();
         createNavigationDraw();
-
 
         backIcon = findViewById(R.id.toolbar_back_button);
         backIcon.setOnClickListener(this);
@@ -73,34 +70,26 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
 
 
         if (savedInstanceState != null) {
-            //Need to get the current fragment and pass the bundle
             return;
         }
 
-        Intent intent = getIntent();
-
-        boolean loggedIn = intent.getBooleanExtra("logged.in", false);
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         ImageView drawerIcon = findViewById(R.id.toolbar_drawer_icon);
-
-
-       // replaceFragment(createMainTranListMenu(), MAIN_MENU_FRAGMENT);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         drawerIcon.setVisibility(View.VISIBLE);
-
 
         try {
             TextView versionTextView = findViewById(R.id.version_textview);
 
             String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            version = "Application Version v" + version;
+            version = "ExpressScript Version " + version;
             versionTextView.setVisibility(View.VISIBLE);
             versionTextView.setText(version);
 
-        } catch (PackageManager.NameNotFoundException e) {
-            //Do nothing
-        }
+        } catch (PackageManager.NameNotFoundException ignore) { }
 
+
+        replaceFragment(createLandingListMenu(), LANDING_FRAGMENT_TAG);
     }
 
 
@@ -111,8 +100,6 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
         fragmentTransaction.addToBackStack(tag);
 
         fragmentTransaction.commit();
-
-
     }
 
     private void createNavigationDraw() {
@@ -121,24 +108,18 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-        //We now need to populate the user name and last logged in
         String username = "Welcome back!";
-        //we dont actually have a last logged in returned from the API, just set to now
-
 
         TextView nameView = drawerLayout.findViewById(R.id.right_drawer_user_name_textview);
         nameView.setText(username);
 
         TextView lastLoginView = drawerLayout.findViewById(R.id.right_draw_user_lastlogin_textview);
 
-
-        //We now need to create the side menu list
         ListView bankingListView = drawerLayout.findViewById(R.id.right_drawer_banking_listview);
-
 
         final List<MenuItem> sideMenuDrawer = new ArrayList<>();
         sideMenuDrawer.add(new MenuItem("Navigation"));
-        sideMenuDrawer.add(new MenuItem(MenuId.REQUEST_QUOTES_MENU, "Request Quotes", null, R.drawable.icon_cart));
+        sideMenuDrawer.add(new MenuItem(MenuId.CREATE_QUOTE_MENU, "Request Quotes", null, R.drawable.icon_cart));
         sideMenuDrawer.add(new MenuItem(MenuId.ORDERS_MENU, "Orders", null, R.drawable.icon_connect));
         sideMenuDrawer.add(new MenuItem(MenuId.QUOTES_MENU, "Quotes", null, R.drawable.icon_cart));
         sideMenuDrawer.add(new MenuItem(MenuId.HEALTH_TIPS_MENU, "Health Tips", null, R.drawable.icon_locator));
@@ -162,16 +143,22 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
 
     protected AbstractListMenuFragment createLandingListMenu() {
         return new DefaultListMenuFragment().createMenus().showCabsHeading(true)
-                .addMenu(MenuId.REQUEST_QUOTES_MENU,"Request a Quote",
-                        "Request a Quote", R.drawable.icon_cart)
-                .addMenu(MenuId.QUOTES_MENU, "Orders and Quotes",
-                        "Retrieve you Orders and Quotations", R.drawable.icon_cart)
+                .addMenu(MenuId.CREATE_QUOTE_MENU,"Create Quote",
+                        "Request's a Quote", R.drawable.cart_plus)
+                .addMenu(MenuId.QUOTES_MENU, "Quotes",
+                        "View all your Quotes", R.drawable.file_compare)
+                .addMenu(MenuId.ORDERS_MENU, "Orders",
+                        "View all your Orders", R.drawable.icon_cart)
+                .addMenu(MenuId.MEDICAL_AID, "Medical Aid",
+                        "Manage linked Medical Aids", R.drawable.credit_card)
                 .addMenu(MenuId.BRANCH_LOCATOR, "Branch Locator",
                         "Find a branch near you", R.drawable.icon_locator)
                 .addMenu(MenuId.HEALTH_TIPS_MENU, "Health Tips",
-                        "Heath Tips keeping you in shape", R.drawable.icon_faq)
+                        "Health Tips keeping you in shape", R.drawable.book_open_page_variant)
+                .addMenu(MenuId.MY_PROFILE, "My Profile",
+                        "View your profile", R.drawable.face_profile)
                 .addMenu(MenuId.CONTACT_US_MENU, "Contact Us",
-                        "Connect with for a one on one chat", R.drawable.icon_connect);
+                        "Connect with us now!", R.drawable.icon_connect);
     }
 
     protected void hideKeyboard() {
@@ -187,7 +174,6 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
     }
 
     private void createActionBar() {
-
         toolbar =  findViewById(R.id.cabs_toolbar);
         setSupportActionBar(toolbar);
     }
@@ -198,30 +184,23 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
 
     @Override
     public void onClick(View v) {
-
         if (R.id.toolbar_back_button == v.getId()) {
             onBackClicked(v);
             return;
         }
-
         if (R.id.toolbar_drawer_icon == v.getId()) {
             drawerLayout.openDrawer(Gravity.RIGHT);
             hideKeyboard();
             return;
         }
-
-
-
         if (R.id.right_draw_home_imageview == v.getId()) {
             initialiseMenu(MenuId.LANDING_MAIN_MENU, false);
             return;
         }
-
     }
 
     protected void initialiseMenu(MenuId menuId, boolean direct) {
 
-        //Close the draw
         toggleDrawerClosed();
         hideKeyboard();
 
@@ -229,39 +208,39 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
             case LANDING_MAIN_MENU:{
                 replaceFragment(createLandingListMenu(), MENU_FRAGMENT_TAG);
                 break;
-
             }
-            case REQUEST_QUOTES_MENU: {
-                replaceFragment(new RequestQuotesFragment(), MENU_FRAGMENT_TAG);
+            case CREATE_QUOTE_MENU: {
+                startActivity(new Intent(MenuActivity.this,CreateQuotation.class));
                 break;
             }
-
             case QUOTES_MENU: {
-                replaceFragment(new QuotesFragment(), MENU_FRAGMENT_TAG);
+                startActivity(new Intent(MenuActivity.this,Quotes.class));
                 break;
             }
-
+            case ORDERS_MENU: {
+                startActivity(new Intent(MenuActivity.this,Orders.class));
+                break;
+            }
+            case MEDICAL_AID: {
+                startActivity(new Intent(MenuActivity.this,MedicalAidActivity.class));
+                break;
+            }
             case BRANCH_LOCATOR: {
-                // replaceFragment(new BranchFragment(), MENU_FRAGMENT_TAG);
-               // Intent locationIntent = new Intent(this,LocationActivity.class);
-                //startActivity(locationIntent);
+                startActivity(new Intent(MenuActivity.this,BranchNavigatorActivity.class));
                 break;
             }
             case HEALTH_TIPS_MENU: {
                 replaceFragment(new HealthTipsFragment(), MENU_FRAGMENT_TAG);
                 break;
             }
-
             case CONTACT_US_MENU: {
                 replaceFragment(new ContactsFragment(), MENU_FRAGMENT_TAG);
                 break;
             }
-
         }
     }
 
     public void onBackClicked(View view) {
-
         onBackPressed();
     }
 
@@ -270,18 +249,16 @@ public class MenuActivity extends AppCompatActivity  implements AbstractListMenu
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         if(fragmentManager.getFragments().isEmpty()) {
-
+            replaceFragment(createLandingListMenu(), LANDING_FRAGMENT_TAG);
         }else {
             super.onBackPressed();
             hideKeyboard();
         }
-
     }
-
 
     @Override
     public void onMenuItemClicked(MenuItem menuItem) {
-
+        initialiseMenu(menuItem.getId(), false);
     }
 
 }

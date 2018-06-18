@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
       android:layout_gravity="center"
+        android:textColor="@color/color_accent_2"
         android:text="Connect With Us" />
 
 
@@ -41,7 +42,7 @@
                 android:layout_marginTop="4dp"
                 android:text="Facebook"
                 android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/color_accent_2"
                 android:textStyle="bold" />
 
             <TextView
@@ -84,9 +85,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="4dp"
-                android:text="LinkedIn"
+                android:text="Twitter"
                 android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/color_accent_2"
                 android:textStyle="bold" />
 
             <TextView
@@ -131,7 +132,7 @@
                 android:layout_marginTop="4dp"
                 android:text="Skype"
                 android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/color_accent_2"
                 android:textStyle="bold" />
 
             <TextView
