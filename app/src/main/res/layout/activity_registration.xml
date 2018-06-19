@@ -6,28 +6,39 @@
     android:fitsSystemWindows="true">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/spinner"
+        android:layout_margin="5dp"
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-        <ImageView android:src="@drawable/logo_256x256"
+        <ImageView android:src="@mipmap/ic_launcher_on_point"
             android:layout_width="wrap_content"
-            android:layout_height="72dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center_horizontal" />
 
-        <!--  First Name Label -->
         <TextView
-            android:id="@+id/txtHeaderInfo1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="48px"
-            android:textStyle="bold"
-            android:text="Account Registration :" />
+            android:layout_height="22sp"
+            android:textAllCaps="true"
+            android:textSize="15sp"
+            android:text="Account Registration"
+            android:textAlignment="center"
+            android:paddingTop="1dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/side_nav_bar"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -152,13 +163,33 @@
             android:padding="12dp"
             android:text="Create Account"/>
 
-    <!--    <TextView android:id="@+id/link_login"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="Already a member? Login"
-            android:gravity="center"
-            android:textSize="16dip"/>-->
 
     </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="22sp"
+                android:textAllCaps="false"
+                android:textSize="8sp"
+                android:text="Express Script version 1.0"
+                android:textAlignment="center"
+                android:paddingTop="1dp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/side_nav_bar"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
 </ScrollView>

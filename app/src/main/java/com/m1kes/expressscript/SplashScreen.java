@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -67,7 +68,7 @@ public class SplashScreen extends AppCompatActivity {
            SkipTask();
        }
         Glide.with(context)
-                .load(R.drawable.woman_design)
+                .load(R.drawable.pharmacy_logo)
                 .into(img);
 
         scheduleAlarm();
@@ -185,7 +186,7 @@ public class SplashScreen extends AppCompatActivity {
     public void onUpdatesChecked(){
         Intent i;
         if(ClientIDManager.getClientID(context) != 0){
-            i = new Intent(this,MainMenuActivity.class);
+            i = new Intent(this,MenuActivity.class);
             startActivity(i);
         }else{
             i = new Intent(this,RegistrationActivity.class);
