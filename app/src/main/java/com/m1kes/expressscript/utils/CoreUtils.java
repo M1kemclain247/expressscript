@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -227,6 +229,19 @@ public class CoreUtils {
     public static int toInt(boolean value) {
         // Convert true to 1 and false to 0.
         return value ? 1 : 0;
+    }
+
+    public static void hideKeyboard(final Activity context) {
+        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        // check if no view has focus:
+        View v = context.getCurrentFocus();
+        if (v == null)
+            return;
+
+        if(inputManager != null)
+        inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
     }
 
 }

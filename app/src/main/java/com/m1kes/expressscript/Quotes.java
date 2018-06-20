@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.m1kes.expressscript.objects.Order;
 import com.m1kes.expressscript.objects.Product;
+import com.m1kes.expressscript.sqlite.adapters.OrdersDBAdapter;
 import com.m1kes.expressscript.sqlite.adapters.ProductsDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
@@ -36,22 +38,23 @@ public class Quotes extends AppCompatActivity {
         ButterKnife.bind(this);
         context = this;
 
-        List<Product> products = ProductsDBAdapter.getAll(context);
+        List<Order> orders = OrdersDBAdapter.getUnsynced(context);
 
-        if(products == null || products.isEmpty())return;
+        if(orders == null || orders.isEmpty())return;
 
-        for(Product p : products){
-            checkProductStatus(p.getId());
+        for(Order order : orders){
+            checkProductStatus(order);
         }
 
     }
 
-    private void checkProductStatus(final int product_id){
+    private void checkProductStatus(final Order order){
 
         WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
             @Override
             public void onSuccess(String response) {
 
+                System.out.println("Response to be parsed is : " + response);
 
                 try {
                     Object jsonArrayy = new JSONParser().parse(response);
@@ -79,17 +82,19 @@ public class Quotes extends AppCompatActivity {
                         System.out.println("Updated a product");
                     }
 
+                    order.setContent(response);
+                    order.setSynced(true);
+
+                    OrdersDBAdapter.update(order,context);
+
                     Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
 
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                System.out.println("Response to be parsed is : " + response);
 
-
-
-                Toast.makeText(context,"Downloaded Using Product ID : " + product_id,Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Downloaded Using Order ID : " + order.getId() ,Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -98,7 +103,7 @@ public class Quotes extends AppCompatActivity {
             }
         });
 
-        request.execute(EndPoints.API_URL + EndPoints.API_CHECK_QUOTE + ClientIDManager.getClientID(context) + "/" + product_id);
+        request.execute(EndPoints.API_URL + EndPoints.API_CHECK_QUOTE + ClientIDManager.getClientID(context) + "/" + order.getId());
 
     }
 

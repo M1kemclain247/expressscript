@@ -1,8 +1,10 @@
 package com.m1kes.expressscript.fragments;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.format.Time;
@@ -17,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +31,9 @@ import com.m1kes.expressscript.R;
 import com.m1kes.expressscript.RegistrationActivity;
 import com.m1kes.expressscript.adapters.menu.DefaultListMenuFragment;
 import com.m1kes.expressscript.objects.MenuId;
+import com.m1kes.expressscript.objects.Order;
 import com.m1kes.expressscript.objects.Product;
+import com.m1kes.expressscript.sqlite.adapters.OrdersDBAdapter;
 import com.m1kes.expressscript.sqlite.adapters.ProductsDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
@@ -56,12 +62,13 @@ public class CreateQuoteFragment extends Fragment {
 
     private final int REQUEST_TAKE_PHOTO = 10021;
     private final int REQUEST_BROWSE_GALLERY = 10022;
-    public final static String KEY_INTENT_IMAGE = "SendQuotation-Image";
     private static SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 
     private ImageView imgResultQuotation;
-    private Button camera,gallery,text,btnSendQuotation,btnRotateImg;
+    private Button camera,gallery,text,btnSendQuotation,btnRotateImg,btnSendTextQuote;
     private TextView txtHintQuote,txtExampleQuote,txtHeaderQuote,txtTitleQuote,txtMainTitleQuote;
+    private TextInputLayout txtLayoutQuote;
+    private EditText editQuoteContent;
 
     public CreateQuoteFragment() {
         // Required empty public constructor
@@ -88,7 +95,9 @@ public class CreateQuoteFragment extends Fragment {
         txtHeaderQuote = view.findViewById(R.id.txtHeaderQuote);
         txtTitleQuote = view.findViewById(R.id.txtTitleQuote);
         txtMainTitleQuote = view.findViewById(R.id.txtMainTitleQuote);
-
+        txtLayoutQuote = view.findViewById(R.id.txtLayoutQuote);
+        editQuoteContent = view.findViewById(R.id.editQuoteContent);
+        btnSendTextQuote = view.findViewById(R.id.btnSendTextQuote);
 
         imgResultQuotation = view.findViewById(R.id.imgResultQuotation);
 
@@ -117,9 +126,10 @@ public class CreateQuoteFragment extends Fragment {
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getContext(),CreateTextQuotation.class));
+                showTextQuote();
             }
         });
+
 
     }
 
@@ -132,11 +142,18 @@ public class CreateQuoteFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
-    public void postImage(final Context context,final Bitmap image){
+    public void postImage(final Context context, final Bitmap image, final String file){
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
+
+                        String encoded = CoreUtils.toBase64(image,true);
+                        if(encoded == null){
+                            Toast.makeText(context,"Failed to send image is null",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         WebUtils.JsonWebPost webPost = WebUtils.postJsonRequest(context, new WebUtils.OnResponseCallback() {
                             @Override
                             public void onSuccess(String response) {
@@ -149,16 +166,17 @@ public class CreateQuoteFragment extends Fragment {
                                     int id = Integer.parseInt ((String) jsonResponse.get("Message"));
 
 
-                                    ProductsDBAdapter.add(new Product(id),context);
+                                    Order order = new Order(id);
+                                    order.setQuotationDetails(file);
 
+                                    OrdersDBAdapter.add(order,context);
+
+                                    OrdersDBAdapter.add(new Order(id),context);
                                     Toast.makeText(context,"Image has been sent Successfully!",Toast.LENGTH_LONG).show();
-
 
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-
-
                             }
 
                             @Override
@@ -169,13 +187,6 @@ public class CreateQuoteFragment extends Fragment {
                         });
 
                         Map<String,String> params = new HashMap<>();
-
-                        String encoded = CoreUtils.toBase64(image,true);
-                        if(encoded == null){
-                            Toast.makeText(context,"Failed to send image is null",Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
                         String clientid = ClientIDManager.getClientID(context)+"";
                         params.put("ClientId",clientid);
                         params.put("ImageBytes",encoded);
@@ -189,19 +200,41 @@ public class CreateQuoteFragment extends Fragment {
                     }
                 }, 1000);
 
-        final ProgressDialog progressDialog = new ProgressDialog(getContext(),
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Sending quotation...");
-        progressDialog.show();
 
+        finish(true);
+    }
+
+
+    private void finish(final boolean dialog){
+
+        ProgressDialog progressDialog = null;
+
+        if(dialog) {
+
+            progressDialog = new ProgressDialog(getContext(),
+                    R.style.AppTheme_Dark_Dialog);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Sending quotation...");
+            progressDialog.show();
+        }
+
+        final ProgressDialog finalProgressDialog = progressDialog;
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        progressDialog.dismiss();
-                        replaceFragment(createLandingListMenu(), LANDING_FRAGMENT_TAG);
+
+                        if(dialog && finalProgressDialog != null){
+                            finalProgressDialog.dismiss();
+                        }
+
+                        replaceFragment(createLandingListMenu(),LANDING_FRAGMENT_TAG);
+
+                        if(getActivity() != null)
+                        CoreUtils.hideKeyboard(getActivity());
+
                     }
-                }, 3 * 1000);
+
+                    }, 3 * 1000);
 
     }
 
@@ -261,7 +294,7 @@ public class CreateQuoteFragment extends Fragment {
     public void processImage(final Bitmap image) {
 
         String generatedName = "img-" + df.format(new Date());
-        String file = CoreUtils.saveFile(image, generatedName, getContext());
+        final String file = CoreUtils.saveFile(image, generatedName, getContext());
 
         if (file == null) {
             Toast.makeText(getContext(), "Error occured while saving image!", Toast.LENGTH_SHORT).show();
@@ -279,7 +312,7 @@ public class CreateQuoteFragment extends Fragment {
         btnSendQuotation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postImage(getContext(),image);
+                postImage(getContext(),image,file);
             }
         });
 
@@ -298,6 +331,112 @@ public class CreateQuoteFragment extends Fragment {
 
         txtMainTitleQuote.setText("Send Quotation");
     }
+
+    private void showTextQuote(){
+
+        txtLayoutQuote.setVisibility(View.VISIBLE);
+        editQuoteContent.setVisibility(View.VISIBLE);
+        btnSendTextQuote.setVisibility(View.VISIBLE);
+
+        camera.setVisibility(View.INVISIBLE);
+        gallery.setVisibility(View.INVISIBLE);
+        text.setVisibility(View.INVISIBLE);
+        txtHeaderQuote.setVisibility(View.INVISIBLE);
+
+        txtMainTitleQuote.setText("Send Quotation");
+
+        btnSendTextQuote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
+            }
+        });
+
+    }
+
+
+    private boolean validate(){
+        if(editQuoteContent.getText().toString().length() <= 0)return false;
+        else return true;
+    }
+
+    private void showDialog() {
+        if(!validate())return;
+
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Confirm");
+        alertDialog.setMessage("Are you sure you would like to send this quotation?");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        postText(getContext());
+                        dialog.dismiss();
+                        finish(true);
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getContext(),"Cancelled",Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+
+    }
+
+    public void postText(final Context context){
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+
+                        final String message = editQuoteContent.getText().toString();
+
+                        WebUtils.JsonWebPost webPost = WebUtils.postJsonRequest(context, new WebUtils.OnResponseCallback() {
+                            @Override
+                            public void onSuccess(String response) {
+                                System.out.println("Response is : " + response);
+                                try {
+                                    Object obj = new JSONParser().parse(response);
+
+                                    JSONObject jsonResponse = (JSONObject) obj;
+                                    int id = Integer.parseInt ((String) jsonResponse.get("Message"));
+
+                                    Order order = new Order(id);
+                                    order.setQuotationDetails(message);
+
+                                    OrdersDBAdapter.add(order,context);
+
+                                    Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
+
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+
+                            @Override
+                            public void onFailed() {
+                                System.out.println("Failed to register!");
+                                Toast.makeText(context,"Failed to Send Quote!",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        Map<String,String> params = new HashMap<>();
+                        params.put("ClientId", ClientIDManager.getClientID(context)+"");
+                        params.put("Message",message);
+
+                        System.out.println("Params :");
+                        System.out.println("ClientId : "+ClientIDManager.getClientID(context)+"");
+                        System.out.println("Message : " + message);
+
+                        webPost.execute(EndPoints.API_URL + EndPoints.API_CREATE_QUOTE_TEXT ,params);
+
+                    }
+                }, 1000);
+    }
+
 
 
 
