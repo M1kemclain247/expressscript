@@ -7,7 +7,7 @@ public class EndPoints {
 
    // public static final String API_URL = "http://196.27.115.46:9002/";
 
-    public static final String API_URL = "http://m1kes.ddns.net:9696/";
+    public static final String API_URL = "http://m1kemclain247.ddns.net:9696/";
 
     public static final String API_CHECK_QUOTE = "api/Transaction/GetQuoteStatus/";
     public static final String URL_MEDICAL_AID = "api/MedicalAids/GetAll/";

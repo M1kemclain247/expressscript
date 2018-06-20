@@ -1,13 +1,20 @@
 package com.m1kes.expressscript;
 
 import android.content.Context;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.m1kes.expressscript.adapters.recyclerview.MessageAdapter;
+import com.m1kes.expressscript.adapters.recyclerview.OrdersRecyclerAdapter;
+import com.m1kes.expressscript.objects.Message;
 import com.m1kes.expressscript.objects.Order;
 import com.m1kes.expressscript.objects.Product;
+import com.m1kes.expressscript.sqlite.adapters.MessagesDBAdapter;
 import com.m1kes.expressscript.sqlite.adapters.OrdersDBAdapter;
 import com.m1kes.expressscript.sqlite.adapters.ProductsDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
@@ -24,11 +31,17 @@ import org.json.simple.parser.ParseException;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class Quotes extends AppCompatActivity {
 
+    @BindView(R.id.quotesRecycler)RecyclerView quotesRecycler;
+
     private Context context;
+    private OrdersRecyclerAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private List<Order> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +51,7 @@ public class Quotes extends AppCompatActivity {
         ButterKnife.bind(this);
         context = this;
 
-        List<Order> orders = OrdersDBAdapter.getUnsynced(context);
+        List<Order> orders = OrdersDBAdapter.getAll(context);
 
         if(orders == null || orders.isEmpty())return;
 
@@ -46,6 +59,7 @@ public class Quotes extends AppCompatActivity {
             checkProductStatus(order);
         }
 
+        setupRecyclerView();
     }
 
     private void checkProductStatus(final Order order){
@@ -108,6 +122,18 @@ public class Quotes extends AppCompatActivity {
     }
 
     @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState);
+        updateRecycler();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateRecycler();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -115,6 +141,21 @@ public class Quotes extends AppCompatActivity {
                 break;
         }
         return true;
+    }
+
+    private void setupRecyclerView(){
+
+        adapter = new OrdersRecyclerAdapter(this,data);
+        layoutManager = new LinearLayoutManager(this);
+        quotesRecycler.setLayoutManager(layoutManager);
+        quotesRecycler.setAdapter(adapter);
+    }
+
+    private void updateRecycler(){
+        System.out.println("Updating Recyclerview");
+        this.data = OrdersDBAdapter.getAll(context);
+        adapter = new OrdersRecyclerAdapter(this,data);
+        quotesRecycler.setAdapter(adapter);
     }
 
 }

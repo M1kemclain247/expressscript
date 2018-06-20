@@ -93,6 +93,7 @@ public class OrdersDBAdapter {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.ID, item.getId());
         values.put(OrdersTable.CONTENT,item.getContent());
+        values.put(OrdersTable.QUOTATION_DETAILS,item.getQuotationDetails());
         values.put(OrdersTable.IS_SYNCED, CoreUtils.toInt(item.isSynced()));
         System.out.println("Adding Order : "+item.toString());
         Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI, OrdersTable.TABLE_NAME);
@@ -106,7 +107,7 @@ public class OrdersDBAdapter {
         ContentValues values = new ContentValues();
         values.put(OrdersTable.ID, item.getId());
         values.put(OrdersTable.CONTENT, item.getContent());
-        values.put(OrdersTable.CONTENT,item.getContent());
+        values.put(OrdersTable.QUOTATION_DETAILS,item.getQuotationDetails());
         values.put(OrdersTable.IS_SYNCED, CoreUtils.toInt(item.isSynced()));
         Uri contentUri = Uri.withAppendedPath(DBContentProvider.CONTENT_URI,OrdersTable.TABLE_NAME);
 

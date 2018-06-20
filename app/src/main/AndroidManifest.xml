@@ -37,11 +37,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".CreateQuotation" />
-        <activity android:name=".RegistrationActivity"
-            android:theme="@style/AppThemeNoActionBar"
-            />
+        <activity
+            android:name=".RegistrationActivity"
+            android:theme="@style/AppThemeNoActionBar" />
         <activity android:name=".MainMenuActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".MessagesActivity" />
@@ -78,14 +77,14 @@
 
         <activity
             android:name=".MenuActivity"
-            android:theme="@style/AppThemeNoActionBar">
-        </activity>
+            android:theme="@style/AppThemeNoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyChhvKnXfPS6Hw1wU55eZzDjucz6tV90qA" />
 
-        <activity android:name=".BranchNavigatorActivity"></activity>
+        <activity android:name=".BranchNavigatorActivity" />
+        <activity android:name=".QuoteDetails"></activity>
     </application>
 
 </manifest>
