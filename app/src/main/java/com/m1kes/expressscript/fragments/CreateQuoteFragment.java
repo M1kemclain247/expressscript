@@ -171,7 +171,6 @@ public class CreateQuoteFragment extends Fragment {
 
                                     OrdersDBAdapter.add(order,context);
 
-                                    OrdersDBAdapter.add(new Order(id),context);
                                     Toast.makeText(context,"Image has been sent Successfully!",Toast.LENGTH_LONG).show();
 
                                 } catch (ParseException e) {
