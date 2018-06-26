@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +32,7 @@ import com.m1kes.expressscript.recievers.CheckMessagesReciever;
 import com.m1kes.expressscript.recievers.UpdateMedicalAidReciever;
 import com.m1kes.expressscript.service.UpdateMedicalAidService;
 import com.m1kes.expressscript.storage.ClientIDManager;
+import com.m1kes.expressscript.utils.CoreUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,8 +70,13 @@ public class SplashScreen extends AppCompatActivity {
            updateDetails.setText("Checking for updated");
            SkipTask();
        }
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.medical_background);
+
+        bitmap = CoreUtils.scaleBitmap(bitmap,600,800);
+
         Glide.with(context)
-                .load(R.drawable.medical_background)
+                .load(bitmap)
                 .into(img);
 
         scheduleAlarm();
@@ -213,7 +221,7 @@ public class SplashScreen extends AppCompatActivity {
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
-                }, 3000);
+                },  5 * 1000);
 
     }
 

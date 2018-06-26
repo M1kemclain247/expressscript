@@ -31,7 +31,11 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/medical_background</item>
+        <item name="android:windowBackground">@drawable/background_black</item>
+    </style>
+
+    <style name="SplashWelcomeTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="fragmentHeading">

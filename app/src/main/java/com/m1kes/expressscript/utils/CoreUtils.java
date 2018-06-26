@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -243,6 +246,36 @@ public class CoreUtils {
         inputManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
     }
+
+
+    /**
+     * Scales the provided bitmap to have the height and width provided.
+     * (Alternative method for scaling bitmaps
+     * since Bitmap.createScaledBitmap(...) produces bad (blocky) quality bitmaps.)
+     *
+     * @param bitmap is the bitmap to scale.
+     * @param newWidth is the desired width of the scaled bitmap.
+     * @param newHeight is the desired height of the scaled bitmap.
+     * @return the scaled bitmap.
+     */
+    public static Bitmap scaleBitmap(Bitmap bitmap, int newWidth, int newHeight) {
+        Bitmap scaledBitmap = Bitmap.createBitmap(newWidth, newHeight, Bitmap.Config.ARGB_8888);
+
+        float scaleX = newWidth / (float) bitmap.getWidth();
+        float scaleY = newHeight / (float) bitmap.getHeight();
+        float pivotX = 0;
+        float pivotY = 0;
+
+        Matrix scaleMatrix = new Matrix();
+        scaleMatrix.setScale(scaleX, scaleY, pivotX, pivotY);
+
+        Canvas canvas = new Canvas(scaledBitmap);
+        canvas.setMatrix(scaleMatrix);
+        canvas.drawBitmap(bitmap, 0, 0, new Paint(Paint.FILTER_BITMAP_FLAG));
+
+        return scaledBitmap;
+    }
+
 
 }
 
