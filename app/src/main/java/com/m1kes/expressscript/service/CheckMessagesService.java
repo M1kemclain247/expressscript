@@ -44,24 +44,32 @@ public class CheckMessagesService extends IntentService {
             @Override
             public void onSuccess(String response) {
 
+                try {
 
-                List<Message> new_content = MessageJsonParser.getMessages(response);
-                if (new_content == null) {
-                    Log.i(LOG_TAG, "Content downloaded is null!");
-                    return;
-                }
+                    List<Message> new_content = MessageJsonParser.getMessages(response);
+                    if (new_content == null) {
+                        Log.i(LOG_TAG, "Content downloaded is null!");
+                        return;
+                    }
 
-                Log.i(LOG_TAG, "Downloaded :" + new_content.size() + " New messages!");
+                    Log.i(LOG_TAG, "Downloaded :" + new_content.size() + " New messages!");
 
 
-                if (new_content.size() >= 1) {
-                    showForegroundNotification(new_content);
-                }
+                    if (new_content.size() >= 1) {
+                        showForegroundNotification(new_content);
+                    }
+                }catch (Exception ignore){ }
+
             }
 
             @Override
             public void onFailed() {
                 Log.i(LOG_TAG, "Failed to connect to server!");
+            }
+
+            @Override
+            public void onCompleteTask() {
+
             }
         });
 

@@ -6,12 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.m1kes.expressscript.QuoteDetails;
 import com.m1kes.expressscript.R;
 import com.m1kes.expressscript.objects.Order;
 
+import java.io.File;
 import java.util.List;
 
 public class OrdersRecyclerAdapter extends RecyclerView.Adapter<OrdersRecyclerAdapter.RecyclerViewHolder> {
@@ -43,13 +46,28 @@ public class OrdersRecyclerAdapter extends RecyclerView.Adapter<OrdersRecyclerAd
 
         if(order!=null){
             holder.txtOrderNo.setText("#" + order.getId());
+
+
+            File file = new File(order.getQuotationDetails());
+            if(file.exists()){
+                System.out.println("File Exists!");
+                System.out.println("Loading image");
+                Glide.with(context)
+                        .load(file)
+                        .into(holder.quoteThumbnail);
+            }
+
             holder.txtQuoteDetails.setText(order.getQuotationDetails());
+
+
 
             if(order.isSynced()){
                 holder.txtQuoteStatus.setText("Complete");
             }else{
                 holder.txtQuoteStatus.setText("Processing...");
             }
+
+
         }
 
     }
@@ -62,6 +80,7 @@ public class OrdersRecyclerAdapter extends RecyclerView.Adapter<OrdersRecyclerAd
     class RecyclerViewHolder extends RecyclerView.ViewHolder{
 
         TextView txtOrderNo,txtQuoteDetails,txtQuoteStatus;
+        ImageView quoteThumbnail;
 
         RecyclerViewHolder(View view, final Context context){
             super(view);
@@ -69,6 +88,7 @@ public class OrdersRecyclerAdapter extends RecyclerView.Adapter<OrdersRecyclerAd
             txtOrderNo = view.findViewById(R.id.txtOrderNo);
             txtQuoteDetails = view.findViewById(R.id.txtQuoteDetails);
             txtQuoteStatus = view.findViewById(R.id.txtQuoteStatus);
+            quoteThumbnail = view.findViewById(R.id.quoteThumbnail);
 
             if(context != null){
                 final Context ctx = context;

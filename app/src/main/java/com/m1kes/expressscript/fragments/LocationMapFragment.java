@@ -68,7 +68,6 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         View view = inflater.inflate(R.layout.fragment_location_map, container, false);
         mapView = (MapView) view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -84,20 +83,6 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback 
 
         mapView.getMapAsync(this);
         return view;
-
-//        if (rootView != null) {
-//            ViewGroup parent = (ViewGroup) rootView.getParent();
-//            if (parent != null)
-//                parent.removeView(rootView);
-//        }
-//        try {
-//            rootView = inflater.inflate(R.layout.fragment_location_map, container, false);
-//            initialize(rootView);
-//        } catch (InflateException e) {
-//            /* map is already there, just return view as it is */
-//            e.printStackTrace();
-//        }
-//        return rootView;
     }
 
     @Override
@@ -112,32 +97,6 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback 
 
     public void onDestroyView() {
         super.onDestroyView();
-//        super.onDestroyView();
-//        try {
-//            Fragment fragment = (getFragmentManager().findFragmentById(R.id.map));
-//            FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-//            ft.remove(fragment);
-//            ft.commit();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    /**
-     * Initialize UI in case "Show on map"
-     *
-     * @param v
-     */
-    private void initialize(View v) {
-        //TextView title = (TextView) v.findViewById(R.id.title);
-//        if (this.title != null) {
-//            title.setText(this.title);
-//        }
-
-//        MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-        //  getMapAsync(this);
-
     }
 
     /**
@@ -236,13 +195,6 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback 
         googleMap.getUiSettings().setZoomControlsEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(true);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         googleMap.setMyLocationEnabled(showSelf);

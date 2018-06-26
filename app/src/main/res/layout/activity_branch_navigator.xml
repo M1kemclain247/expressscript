@@ -38,13 +38,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Location" />
+            android:text="Branch Locator"
+            android:layout_marginBottom="10dp"
+            />
 
         <Button
             android:id="@+id/location_show_map_button"
             style="@style/primaryBtn"
             android:layout_marginTop="@dimen/primary_button_top_margin"
-            android:text="Show on Map" />
+            android:text="Show on Map"
+            android:layout_marginBottom="10dp"
+            />
 
         <ListView
             android:id="@+id/android:list"
@@ -62,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/edittext_top_margin"
-            android:text="Currenlty there are no locations to show. Please check back later" />
+            android:text="Currently there are no locations to show. Please check back later...." />
 
 
     </LinearLayout>

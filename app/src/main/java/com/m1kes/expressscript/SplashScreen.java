@@ -68,7 +68,7 @@ public class SplashScreen extends AppCompatActivity {
            SkipTask();
        }
         Glide.with(context)
-                .load(R.drawable.pharmacy_logo)
+                .load(R.drawable.medical_background)
                 .into(img);
 
         scheduleAlarm();

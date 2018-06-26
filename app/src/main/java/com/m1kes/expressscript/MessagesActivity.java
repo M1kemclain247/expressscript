@@ -123,6 +123,11 @@ public class MessagesActivity extends AppCompatActivity {
             public void onFailed() {
                 Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onCompleteTask() {
+
+            }
         });
 
         request.execute(EndPoints.API_URL + EndPoints.API_GET_ALL_MESSAGES + ClientIDManager.getClientID(context));
@@ -238,6 +243,11 @@ public class MessagesActivity extends AppCompatActivity {
                             public void onFailed() {
                                 System.out.println("Failed to send Message!");
                                 Toast.makeText(context,"Failed to Send Message!",Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onCompleteTask() {
+
                             }
                         });
 

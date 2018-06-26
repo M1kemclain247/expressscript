@@ -142,6 +142,11 @@ public class NewMessageActivity extends AppCompatActivity {
                                 System.out.println("Failed to send Message!");
                                 Toast.makeText(context,"Failed to Send Message!",Toast.LENGTH_LONG).show();
                             }
+
+                            @Override
+                            public void onCompleteTask() {
+
+                            }
                         });
 
 

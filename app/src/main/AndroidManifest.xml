@@ -77,14 +77,14 @@
 
         <activity
             android:name=".MenuActivity"
-            android:theme="@style/AppThemeNoActionBar"></activity>
+            android:theme="@style/AppThemeNoActionBar"/>
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyChhvKnXfPS6Hw1wU55eZzDjucz6tV90qA" />
 
         <activity android:name=".BranchNavigatorActivity" />
-        <activity android:name=".QuoteDetails"></activity>
+        <activity android:name=".QuoteDetails"/>
     </application>
 
 </manifest>

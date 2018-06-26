@@ -70,18 +70,16 @@ public class BranchNavigatorActivity extends ListActivity implements View.OnClic
         }
 
         locationType = getIntent().getStringExtra(EXTRA_LOCATION_TYPE);
-        String headingName = "";
         locations = new ArrayList<>();
-        locations.add(new Branch("TEst1","Harare","Harare",14.5,17.9));
-        locations.add(new Branch("TEst2","Gweru","Harare",18.5,40.9));
-        locations.add(new Branch("TEst3","Bulawyo","Harare",19.5,27.1));
-        locations.add(new Branch("TEst4","Bindura","Harare",24.5,27.9));
-        locations.add(new Branch("TEst5","Gwanda","Harare",30.5,30.9));
+        locations.add(new Branch("Head Office","Harare","Harare",14.5,17.9));
+        locations.add(new Branch("Kwame Office A2","Kwame Nkrumah Avenue, Harare","Harare",18.5,40.9));
+        locations.add(new Branch("Bulawayo Office A1","Julius Nyerere Way, Harare","Harare",19.5,27.1));
+        locations.add(new Branch("Chitungwiza Office A2","Chitungwiza","Harare",24.5,27.9));
+        locations.add(new Branch("Bindura Office A3","Bindura","Harare",30.5,30.9));
 
         if (locations == null) {
             //TODO we need to
         }
-
 
         //Prepare the client and location request that could be used
         googleApiClient = new GoogleApiClient.Builder(this)

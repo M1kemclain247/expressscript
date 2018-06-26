@@ -9,7 +9,9 @@
         android:layout_width="@dimen/map_info_max_width"
         android:layout_height="wrap_content"
         android:minWidth="@dimen/map_info_min_width"
-        android:padding="@dimen/map_info_window_padding">
+        android:padding="@dimen/map_info_window_padding"
+        android:layout_margin="10dp"
+        >
 
         <TextView
             android:id="@+id/name"
@@ -18,6 +20,7 @@
             android:layout_alignParentLeft="true"
             android:singleLine="true"
             android:textSize="@dimen/map_info_title_text_size"
+            android:text="Office Branch"
             android:textStyle="bold" />
 
         <TextView
@@ -26,7 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/name"
-            android:textSize="@dimen/map_info_text_size" />
+            android:text="Address"
+            android:textSize="@dimen/map_info_text_size"
+            android:layout_marginBottom="10dp"
+            />
 
         <ImageView
             android:id="@+id/directions"

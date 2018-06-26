@@ -115,6 +115,11 @@ public class Quotes extends AppCompatActivity {
             public void onFailed() {
                 Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onCompleteTask() {
+
+            }
         });
 
         request.execute(EndPoints.API_URL + EndPoints.API_CHECK_QUOTE + ClientIDManager.getClientID(context) + "/" + order.getId());

@@ -32,22 +32,31 @@ public class UpdateMedicalAidService extends IntentService {
             @Override
             public void onSuccess(String response) {
 
-               List<MedicalAid> data = MedicalAidJsonParser.getMedicalAid(response);
-                if(data == null || data.isEmpty()){
-                    Log.i(LOG_TAG, "Unable to connect to server");
-                    return;
-                }
-                //Setup persistant storage
-                MedicalAidDBAdapter.refill(data,getApplicationContext());
+                try {
 
-                if(data.size() >= 1) {
-                    Log.i(LOG_TAG, "Updated Medical Aid successfully");
-                }
+                    List<MedicalAid> data = MedicalAidJsonParser.getMedicalAid(response);
+                    if (data == null || data.isEmpty()) {
+                        Log.i(LOG_TAG, "Unable to connect to server");
+                        return;
+                    }
+                    //Setup persistant storage
+                    MedicalAidDBAdapter.refill(data, getApplicationContext());
+
+                    if (data.size() >= 1) {
+                        Log.i(LOG_TAG, "Updated Medical Aid successfully");
+                    }
+
+                }catch (Exception ignore){}
             }
 
             @Override
             public void onFailed() {
                 Log.i(LOG_TAG, "Unable to connect to server");
+            }
+
+            @Override
+            public void onCompleteTask() {
+
             }
         });
 

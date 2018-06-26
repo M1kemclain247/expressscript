@@ -94,15 +94,11 @@ public class RegistrationActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(RegistrationActivity.this,
+        final ProgressDialog dialog = new ProgressDialog(RegistrationActivity.this,
                 R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
-
-
-
-        //TODO Some validations
+        dialog.setIndeterminate(true);
+        dialog.setMessage("Creating Account...");
+        dialog.show();
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -153,7 +149,12 @@ public class RegistrationActivity extends AppCompatActivity {
                                 Toast.makeText(context,"Failed to register!",Toast.LENGTH_LONG).show();
                                 onSignupFailed();
                             }
-                        });
+
+                            @Override
+                            public void onCompleteTask() {
+
+                            }
+                        },dialog);
 
                         Map<String,String> params = new HashMap<>();
 
@@ -175,7 +176,6 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         webPost.execute(EndPoints.API_URL + EndPoints.API_SIGNUP_URL ,params);
 
-                        progressDialog.dismiss();
                     }
                 }, 1000);
     }

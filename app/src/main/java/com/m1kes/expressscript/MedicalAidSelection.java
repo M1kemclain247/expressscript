@@ -82,6 +82,11 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
             public void onFailed() {
                 Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
             }
+
+            @Override
+            public void onCompleteTask() {
+
+            }
         });
 
         request.execute(EndPoints.API_URL + EndPoints.URL_MEDICAL_AID + ClientIDManager.getClientID(context));
@@ -149,6 +154,11 @@ public class MedicalAidSelection extends AppCompatActivity implements Selectable
             @Override
             public void onFailed() {
                 Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCompleteTask() {
+
             }
         });
 

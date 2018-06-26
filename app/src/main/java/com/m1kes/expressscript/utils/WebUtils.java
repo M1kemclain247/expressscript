@@ -1,6 +1,7 @@
 package com.m1kes.expressscript.utils;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -32,14 +33,23 @@ public class WebUtils {
     public interface OnResponseCallback {
         void onSuccess(String response);
         void onFailed();
+        void onCompleteTask();
     }
 
     public static SimpleHttpURLWebRequest getSimpleHttpRequest(OnResponseCallback callback) {
         return new SimpleHttpURLWebRequest(callback);
     }
 
+    public static SimpleHttpURLWebRequest getSimpleHttpRequest(OnResponseCallback callback,ProgressDialog dialog) {
+        return new SimpleHttpURLWebRequest(callback,dialog);
+    }
+
     public static JsonWebPost postJsonRequest(Context context,OnResponseCallback callback) {
         return new JsonWebPost(context,callback);
+    }
+
+    public static JsonWebPost postJsonRequest(Context context,OnResponseCallback callback,ProgressDialog dialog) {
+        return new JsonWebPost(context,callback,dialog);
     }
 
     public static class JsonWebPost extends AsyncTask<Object,String,Void>{
@@ -47,10 +57,23 @@ public class WebUtils {
         private OnResponseCallback callback;
         @SuppressLint("StaticFieldLeak")
         private Context context;
+        private ProgressDialog dialog;
 
         private JsonWebPost(Context context,OnResponseCallback callback) {
             this.callback = callback;
             this.context = context;
+        }
+
+        private JsonWebPost(Context context,OnResponseCallback callback,ProgressDialog dialog) {
+            this.callback = callback;
+            this.context = context;
+            this.dialog = dialog;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            if(dialog != null && !dialog.isShowing())
+                dialog.show();
         }
 
         @Override
@@ -75,6 +98,7 @@ public class WebUtils {
                         public void onResponse(String response) {
                             callback.onSuccess(response);
                             Log.d("Response", response);
+                            if(dialog != null)dialog.dismiss();
                         }
                     },
                     new Response.ErrorListener()
@@ -82,6 +106,7 @@ public class WebUtils {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             callback.onFailed();
+                            if(dialog != null)dialog.dismiss();
                             Log.d("Error.Response", error.getLocalizedMessage() + "");
                         }
                     }
@@ -103,14 +128,20 @@ public class WebUtils {
     public static class SimpleHttpURLWebRequest extends AsyncTask<String, String, String> {
 
         private OnResponseCallback callback;
+        private ProgressDialog dialog;
 
         private SimpleHttpURLWebRequest(OnResponseCallback callback) {
             this.callback = callback;
         }
 
+        private SimpleHttpURLWebRequest(OnResponseCallback callback,ProgressDialog dialog) {
+            this.callback = callback;
+            this.dialog = dialog;
+        }
+
         @Override
         protected void onPreExecute() {
-
+            if(dialog != null && !dialog.isShowing()) dialog.show();
         }
 
         @SuppressLint("NewApi")
@@ -138,6 +169,8 @@ public class WebUtils {
                 callback.onSuccess(result);
             }
 
+            if(dialog != null)
+            dialog.dismiss();
         }
 
         private String makeRequestHttp(String url) {
@@ -149,7 +182,7 @@ public class WebUtils {
 
                 HttpClient httpclient;
                 final HttpParams httpParams = new BasicHttpParams();
-                HttpConnectionParams.setConnectionTimeout(httpParams, 4000);
+                HttpConnectionParams.setConnectionTimeout(httpParams,  6 * 1000); //6 seconds timeout
                 httpclient = new DefaultHttpClient(httpParams);
 
                 HttpGet request = new HttpGet(url);

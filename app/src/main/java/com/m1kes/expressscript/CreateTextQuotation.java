@@ -125,6 +125,11 @@ public class CreateTextQuotation extends AppCompatActivity {
                                 System.out.println("Failed to register!");
                                 Toast.makeText(context,"Failed to Send Quote!",Toast.LENGTH_LONG).show();
                             }
+
+                            @Override
+                            public void onCompleteTask() {
+
+                            }
                         });
 
                         Map<String,String> params = new HashMap<>();

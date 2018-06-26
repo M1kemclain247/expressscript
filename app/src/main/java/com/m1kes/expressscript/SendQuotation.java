@@ -151,6 +151,11 @@ public class SendQuotation extends AppCompatActivity {
                                 System.out.println("Failed to register!");
                                 Toast.makeText(context,"Failed to Send Image!",Toast.LENGTH_LONG).show();
                             }
+
+                            @Override
+                            public void onCompleteTask() {
+
+                            }
                         });
 
                         Map<String,String> params = new HashMap<>();

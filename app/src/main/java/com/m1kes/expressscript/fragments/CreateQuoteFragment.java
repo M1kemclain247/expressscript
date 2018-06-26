@@ -154,6 +154,12 @@ public class CreateQuoteFragment extends Fragment {
                             return;
                         }
 
+                        final ProgressDialog dialog = new ProgressDialog(getContext(),
+                                R.style.AppTheme_Dark_Dialog);
+                        dialog.setIndeterminate(true);
+                        dialog.setMessage("Requesting Quote...");
+                        dialog.show();
+
                         WebUtils.JsonWebPost webPost = WebUtils.postJsonRequest(context, new WebUtils.OnResponseCallback() {
                             @Override
                             public void onSuccess(String response) {
@@ -167,7 +173,7 @@ public class CreateQuoteFragment extends Fragment {
 
 
                                     Order order = new Order(id);
-                                    order.setQuotationDetails(file);
+                                    order.setQuotationDetails(file_path == null ? file : file_path);
 
                                     OrdersDBAdapter.add(order,context);
 
@@ -183,7 +189,12 @@ public class CreateQuoteFragment extends Fragment {
                                 System.out.println("Failed to register!");
                                 Toast.makeText(context,"Failed to Send Image!",Toast.LENGTH_LONG).show();
                             }
-                        });
+
+                            @Override
+                            public void onCompleteTask() {
+
+                            }
+                        },dialog);
 
                         Map<String,String> params = new HashMap<>();
                         String clientid = ClientIDManager.getClientID(context)+"";
@@ -200,31 +211,15 @@ public class CreateQuoteFragment extends Fragment {
                 }, 1000);
 
 
-        finish(true);
+        finish();
     }
 
 
-    private void finish(final boolean dialog){
+    private void finish(){
 
-        ProgressDialog progressDialog = null;
-
-        if(dialog) {
-
-            progressDialog = new ProgressDialog(getContext(),
-                    R.style.AppTheme_Dark_Dialog);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Sending quotation...");
-            progressDialog.show();
-        }
-
-        final ProgressDialog finalProgressDialog = progressDialog;
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-
-                        if(dialog && finalProgressDialog != null){
-                            finalProgressDialog.dismiss();
-                        }
 
                         replaceFragment(createLandingListMenu(),LANDING_FRAGMENT_TAG);
 
@@ -370,7 +365,7 @@ public class CreateQuoteFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         postText(getContext());
                         dialog.dismiss();
-                        finish(true);
+                        finish();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
@@ -391,6 +386,12 @@ public class CreateQuoteFragment extends Fragment {
                     public void run() {
 
                         final String message = editQuoteContent.getText().toString();
+
+                        final ProgressDialog dialog = new ProgressDialog(getContext(),
+                                R.style.AppTheme_Dark_Dialog);
+                        dialog.setIndeterminate(true);
+                        dialog.setMessage("Requesting Quotation...");
+                        dialog.show();
 
                         WebUtils.JsonWebPost webPost = WebUtils.postJsonRequest(context, new WebUtils.OnResponseCallback() {
                             @Override
@@ -420,7 +421,12 @@ public class CreateQuoteFragment extends Fragment {
                                 System.out.println("Failed to register!");
                                 Toast.makeText(context,"Failed to Send Quote!",Toast.LENGTH_LONG).show();
                             }
-                        });
+
+                            @Override
+                            public void onCompleteTask() {
+
+                            }
+                        },dialog);
 
                         Map<String,String> params = new HashMap<>();
                         params.put("ClientId", ClientIDManager.getClientID(context)+"");
@@ -436,8 +442,7 @@ public class CreateQuoteFragment extends Fragment {
                 }, 1000);
     }
 
-
-
+    private String file_path = null;
 
     private Uri generateTimeStampPhotoFileUri() {
 
@@ -449,6 +454,8 @@ public class CreateQuoteFragment extends Fragment {
             File photoFile = new File(outputDir, System.currentTimeMillis()
                     + ".jpg");
             photoFileUri = Uri.fromFile(photoFile);
+
+            file_path = photoFile.getAbsolutePath();
         }
         return photoFileUri;
     }
