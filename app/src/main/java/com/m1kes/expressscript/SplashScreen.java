@@ -90,7 +90,7 @@ public class SplashScreen extends AppCompatActivity {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Check for updates to medical Aid
-        Intent update_medical_aid = new Intent(getApplicationContext(), UpdateMedicalAidService.class);
+        Intent update_medical_aid = new Intent(getApplicationContext(), UpdateMedicalAidReciever.class);
         final PendingIntent pendingUpdateAid = PendingIntent.getBroadcast(this, UpdateMedicalAidReciever.REQUEST_CODE,
                 update_medical_aid, PendingIntent.FLAG_UPDATE_CURRENT);
 

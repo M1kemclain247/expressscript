@@ -19,7 +19,9 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            >
 
             <CheckedTextView
                 android:id="@+id/quoteSelection"
@@ -36,14 +38,18 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                >
 
                 <TextView
                     android:id="@+id/txtItemDesc"
                     android:text="x1 iBrufen 500mg pack "
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    />
 
 
             </LinearLayout>
@@ -52,7 +58,9 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                >
 
                 <TextView
                     android:id="@+id/txtItemPrice"
@@ -60,7 +68,9 @@
                     android:textAlignment="textEnd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    />
 
             </LinearLayout>
 

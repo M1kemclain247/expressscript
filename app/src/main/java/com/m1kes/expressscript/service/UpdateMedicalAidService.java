@@ -2,6 +2,7 @@ package com.m1kes.expressscript.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
@@ -26,7 +27,6 @@ public class UpdateMedicalAidService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent){
         Log.i(LOG_TAG, "Service is Running");
-
 
         WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
             @Override

@@ -1,13 +1,17 @@
 package com.m1kes.expressscript.service;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -33,53 +37,76 @@ public class CheckMessagesService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    public ComponentName startService(Intent service) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(service);
+        }
+
+        return super.startService(service);
+    }
+
+    @Override
+    protected void onHandleIntent(@Nullable final Intent intent) {
 
         Log.i(LOG_TAG, "Service is Running");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getApplicationContext().startForegroundService(intent);
+        }
 
         if(ClientIDManager.getClientID(getApplicationContext()) == 0)return;
 
 
-        WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
+        new Handler().post(new Runnable() {
             @Override
-            public void onSuccess(String response) {
+            public void run() {
+                WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
+                    @Override
+                    public void onSuccess(String response) {
 
-                try {
+                        try {
 
-                    List<Message> new_content = MessageJsonParser.getMessages(response);
-                    if (new_content == null) {
-                        Log.i(LOG_TAG, "Content downloaded is null!");
-                        return;
+                            List<Message> new_content = MessageJsonParser.getMessages(response);
+                            if (new_content == null) {
+                                Log.i(LOG_TAG, "Content downloaded is null!");
+                                return;
+                            }
+
+                            Log.i(LOG_TAG, "Downloaded :" + new_content.size() + " New messages!");
+
+
+                            if (new_content.size() >= 1) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    startForegroundService(intent);
+                                }
+
+                                showForegroundNotification(new_content);
+                            }
+                        }catch (Exception ignore){ }
+
                     }
 
-                    Log.i(LOG_TAG, "Downloaded :" + new_content.size() + " New messages!");
-
-
-                    if (new_content.size() >= 1) {
-                        showForegroundNotification(new_content);
+                    @Override
+                    public void onFailed() {
+                        Log.i(LOG_TAG, "Failed to connect to server!");
                     }
-                }catch (Exception ignore){ }
 
-            }
+                    @Override
+                    public void onCompleteTask() {
 
-            @Override
-            public void onFailed() {
-                Log.i(LOG_TAG, "Failed to connect to server!");
-            }
+                    }
+                });
 
-            @Override
-            public void onCompleteTask() {
+                request.execute(EndPoints.API_URL + EndPoints.API_GET_ALL_MESSAGES + ClientIDManager.getClientID(getApplicationContext()));
 
+                // Release the wake lock provided by the WakefulBroadcastReceiver.
+                if (intent != null) {
+                    WakefulBroadcastReceiver.completeWakefulIntent(intent);
+                    System.out.println("Releasing Wakelock as Service is starting");
+                }
             }
         });
 
-        request.execute(EndPoints.API_URL + EndPoints.API_GET_ALL_MESSAGES + ClientIDManager.getClientID(getApplicationContext()));
-
-        // Release the wake lock provided by the WakefulBroadcastReceiver.
-        if (intent != null) {
-            WakefulBroadcastReceiver.completeWakefulIntent(intent);
-            System.out.println("Releasing Wakelock as Service is starting");
-        }
     }
 
     private void showForegroundNotification(List<Message> messages) {
@@ -127,7 +154,10 @@ public class CheckMessagesService extends IntentService {
 
         builder.setContentIntent(resultPendingIntent);
 
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+  //      this.startForeground(NOTIFICATION_ID,builder.build());
+//
+        //notificationManager.notify(NOTIFICATION_ID, builder.build());
 
     }
+
 }

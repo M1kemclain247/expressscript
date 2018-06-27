@@ -53,12 +53,22 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">2dp</item>
     </style>
+
+
     <style name="spinner">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:background">@drawable/spinner</item>
     </style>
+
+    <style name="FormLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:background">@drawable/form_background</item>
+    </style>
+
     <style name="primaryBtn">
 
         <item name="android:layout_width">match_parent</item>
