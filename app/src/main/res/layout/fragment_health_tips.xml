@@ -1,17 +1,8 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-
-    >
-
-
-
-    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="fill_parent"
         android:gravity="center"
         android:paddingTop="10dp"
         android:orientation="vertical">
@@ -21,24 +12,39 @@
             android:layout_height="22sp"
             android:textAllCaps="true"
             android:textSize="15sp"
-            android:text="Health TIP"
+            android:text="Health TIPS"
             android:paddingTop="1dp"
             android:textColor="@android:color/white"
             android:background="@drawable/side_nav_bar"
-
             android:textAlignment="center"/>
+
+
         <TextView
-            android:id="@+id/pin_change_label_textview"
-            android:textAlignment="center"
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
-            android:textColor="@color/colorPrimaryDark"
             android:layout_height="wrap_content"
-            android:padding ="10dp"
-            android:text="@string/health_tip" />
+            android:layout_marginTop="10dp"
+            android:textSize="8sp"
+            android:textColor="@color/black"
+            android:text="Swipe to refresh"
+            android:textAlignment="center"/>
 
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="20dp"
+            >
 
-    </LinearLayout>
+            <ListView
+                android:id="@+id/healthTipsListView"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                tools:listitem="@layout/health_item_layout"
+                >
 
-</ScrollView>
+            </ListView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

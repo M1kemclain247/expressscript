@@ -26,15 +26,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.m1kes.expressscript.CreateTextQuotation;
 import com.m1kes.expressscript.R;
-import com.m1kes.expressscript.RegistrationActivity;
 import com.m1kes.expressscript.adapters.menu.DefaultListMenuFragment;
 import com.m1kes.expressscript.objects.MenuId;
-import com.m1kes.expressscript.objects.Order;
-import com.m1kes.expressscript.objects.Product;
-import com.m1kes.expressscript.sqlite.adapters.OrdersDBAdapter;
-import com.m1kes.expressscript.sqlite.adapters.ProductsDBAdapter;
+import com.m1kes.expressscript.objects.Quote;
+import com.m1kes.expressscript.sqlite.adapters.QuotesDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
@@ -172,10 +168,10 @@ public class CreateQuoteFragment extends Fragment {
                                     int id = Integer.parseInt ((String) jsonResponse.get("Message"));
 
 
-                                    Order order = new Order(id);
-                                    order.setQuotationDetails(file_path == null ? file : file_path);
+                                    Quote quote = new Quote(id);
+                                    quote.setQuotationDetails(file_path == null ? file : file_path);
 
-                                    OrdersDBAdapter.add(order,context);
+                                    QuotesDBAdapter.add(quote,context);
 
                                     Toast.makeText(context,"Image has been sent Successfully!",Toast.LENGTH_LONG).show();
 
@@ -403,10 +399,10 @@ public class CreateQuoteFragment extends Fragment {
                                     JSONObject jsonResponse = (JSONObject) obj;
                                     int id = Integer.parseInt ((String) jsonResponse.get("Message"));
 
-                                    Order order = new Order(id);
-                                    order.setQuotationDetails(message);
+                                    Quote quote = new Quote(id);
+                                    quote.setQuotationDetails(message);
 
-                                    OrdersDBAdapter.add(order,context);
+                                    QuotesDBAdapter.add(quote,context);
 
                                     Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
 

@@ -13,6 +13,7 @@ import com.m1kes.expressscript.adapters.recyclerview.quoteitems.objects.Selectab
 import com.m1kes.expressscript.objects.QuoteItem;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,17 +45,19 @@ public class SelectableQuoteItemRecyclerAdapter extends RecyclerView.Adapter imp
         return new SelectableQuoteItemViewHolder(itemView, this);
     }
 
+    private DecimalFormat df = new DecimalFormat("#.##");
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
         SelectableQuoteItemViewHolder holder = (SelectableQuoteItemViewHolder) viewHolder;
         SelectableQuoteItem item = mValues.get(position);
 
-        String desc = item.getDesc();
-        String price = item.getPrice();
+        String desc = item.getDescription();
+        double price = item.getTotal();
 
         holder.txtItemDesc.setText(desc);
-        holder.txtItemPrice.setText(price);
+        holder.txtItemPrice.setText("$" + df.format(price));
 
         if (isMultiSelectionEnabled) {
             TypedValue value = new TypedValue();

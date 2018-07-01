@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.m1kes.expressscript.R;
 import com.m1kes.expressscript.objects.QuoteItem;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class QuoteItemsRecyclerAdapter extends RecyclerView.Adapter<QuoteItemsRecyclerAdapter.RecyclerViewHolder> {
@@ -29,6 +30,7 @@ public class QuoteItemsRecyclerAdapter extends RecyclerView.Adapter<QuoteItemsRe
         viewHolder = new QuoteItemsRecyclerAdapter.RecyclerViewHolder(view,context);
         return viewHolder;
     }
+    private DecimalFormat df = new DecimalFormat("#.##");
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
@@ -36,8 +38,8 @@ public class QuoteItemsRecyclerAdapter extends RecyclerView.Adapter<QuoteItemsRe
         QuoteItem order = orders.get(position);
 
         if(order!=null){
-            holder.txtItemDesc.setText(order.getDesc());
-            holder.txtItemPrice.setText(order.getPrice());
+            holder.txtItemDesc.setText(order.getDescription());
+            holder.txtItemPrice.setText("$" + df.format(order.getTotal()) );
         }
     }
 

@@ -7,6 +7,30 @@
         A balanced breakfast includes fresh fruit or fruit juice, a high-fibre breakfast cereal,
         low-fat milk or yoghurt, wholewheat toast, and a boiled egg.  </string>
 
+
+    <array name="health_tips">
+        <item> Dont skip breakfast.
+            Studies show that eating a proper breakfast is one of the most positive things you
+            can do if you are trying to lose weight. Breakfast skippers tend to gain weight.
+            A balanced breakfast includes fresh fruit or fruit juice, a high-fibre breakfast cereal,
+            low-fat milk or yoghurt, wholewheat toast, and a boiled egg.</item>
+        <item> Dont Drink Sugar Calories
+            Sugary drinks are the most fattening things you can put into your body.
+            This is because liquid sugar calories don't get registered by the brain in the same way as calories from solid foods (1).
+            For this reason, when you drink soda, you end up eating more total calories (2, 3).
+            Sugary drinks are strongly associated with obesity, type 2 diabetes, heart disease and all sorts of health problems (4, 5, 6, 7).
+            Keep in mind that fruit juices are almost as bad as soda in this regard. They contain just as much sugar, and the small amounts of antioxidants do NOT negate the harmful effects of the sugar (8).</item>
+        <item>Eat Nuts
+            Despite being high in fat, nuts are incredibly nutritious and healthy.
+            They are loaded with magnesium, vitamin E, fiber and various other nutrients (9).
+            Studies show that nuts can help you lose weight, and may help fight type 2 diabetes and heart disease (10, 11, 12).
+            Additionally, about 10-15% of the calories in nuts aren't even absorbed into the body, and some evidence suggests that they can boost metabolism (13).
+            In one study, almonds were shown to increase weight loss by 62% compared to complex carbohydrates (14).</item>
+        <item>Avoid Processed Junk Food (Eat Real Food Instead)
+            All the processed junk foods in the diet are the biggest reason the world is fatter and sicker than ever before.
+            These foods have been engineered to be "hyper-rewarding," so they trick our brains into eating more than we need, even leading to addiction in some people (15).
+            They are also low in fiber, protein and micronutrients (empty calories), but high in unhealthy ingredients like added sugar and refined grains.</item>
+    </array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

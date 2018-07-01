@@ -9,26 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.m1kes.expressscript.adapters.recyclerview.MessageAdapter;
-import com.m1kes.expressscript.adapters.recyclerview.OrdersRecyclerAdapter;
-import com.m1kes.expressscript.objects.Message;
-import com.m1kes.expressscript.objects.Order;
+import com.m1kes.expressscript.adapters.recyclerview.QuotesRecyclerAdapter;
+import com.m1kes.expressscript.objects.Quote;
 import com.m1kes.expressscript.objects.Product;
-import com.m1kes.expressscript.sqlite.adapters.MessagesDBAdapter;
-import com.m1kes.expressscript.sqlite.adapters.OrdersDBAdapter;
+import com.m1kes.expressscript.objects.QuoteItem;
+import com.m1kes.expressscript.sqlite.adapters.QuotesDBAdapter;
 import com.m1kes.expressscript.sqlite.adapters.ProductsDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
 import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
 
-import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -39,9 +36,9 @@ public class Quotes extends AppCompatActivity {
     @BindView(R.id.quotesRecycler)RecyclerView quotesRecycler;
 
     private Context context;
-    private OrdersRecyclerAdapter adapter;
+    private QuotesRecyclerAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<Order> data;
+    private List<Quote> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,18 +48,18 @@ public class Quotes extends AppCompatActivity {
         ButterKnife.bind(this);
         context = this;
 
-        List<Order> orders = OrdersDBAdapter.getAll(context);
+        List<Quote> quotes = QuotesDBAdapter.getAll(context);
 
-        if(orders == null || orders.isEmpty())return;
+        if(quotes == null || quotes.isEmpty())return;
 
-        for(Order order : orders){
-            checkProductStatus(order);
+        for(Quote quote : quotes){
+            checkProductStatus(quote);
         }
 
         setupRecyclerView();
     }
 
-    private void checkProductStatus(final Order order){
+    private void checkProductStatus(final Quote quote){
 
         WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {
             @Override
@@ -75,6 +72,7 @@ public class Quotes extends AppCompatActivity {
 
                     JSONArray jsonResponse = (JSONArray) jsonArrayy;
 
+                    List<QuoteItem> items = new ArrayList<>();
                     for(int i = 0; i < jsonResponse.size(); i++){
                          JSONObject obj =  (JSONObject)jsonResponse.get(i);
 
@@ -94,21 +92,23 @@ public class Quotes extends AppCompatActivity {
 
                         ProductsDBAdapter.update(product,context);
                         System.out.println("Updated a product");
+                        items.add(new QuoteItem(quote.getId(),productId,description,unit_price,quantity,total_price));
                     }
 
-                    order.setContent(response);
-                    order.setSynced(true);
+                    quote.setContent(response);
+                    quote.setSynced(true);
+                    quote.setItems(items);
 
-                    OrdersDBAdapter.update(order,context);
+                    QuotesDBAdapter.update(quote,context);
+                    updateRecycler();
 
-                    Toast.makeText(context,"Quote has been sent Successfully!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"Quote status updated!",Toast.LENGTH_LONG).show();
 
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    Toast.makeText(context,"Unable to connect, check your Internet Connection!", Toast.LENGTH_LONG).show();
                 }
 
-
-                Toast.makeText(context,"Downloaded Using Order ID : " + order.getId() ,Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -122,7 +122,7 @@ public class Quotes extends AppCompatActivity {
             }
         });
 
-        request.execute(EndPoints.API_URL + EndPoints.API_CHECK_QUOTE + ClientIDManager.getClientID(context) + "/" + order.getId());
+        request.execute(EndPoints.API_URL + EndPoints.API_CHECK_QUOTE + ClientIDManager.getClientID(context) + "/" + quote.getId());
 
     }
 
@@ -150,7 +150,7 @@ public class Quotes extends AppCompatActivity {
 
     private void setupRecyclerView(){
 
-        adapter = new OrdersRecyclerAdapter(this,data);
+        adapter = new QuotesRecyclerAdapter(this,data);
         layoutManager = new LinearLayoutManager(this);
         quotesRecycler.setLayoutManager(layoutManager);
         quotesRecycler.setAdapter(adapter);
@@ -158,8 +158,8 @@ public class Quotes extends AppCompatActivity {
 
     private void updateRecycler(){
         System.out.println("Updating Recyclerview");
-        this.data = OrdersDBAdapter.getAll(context);
-        adapter = new OrdersRecyclerAdapter(this,data);
+        this.data = QuotesDBAdapter.getAll(context);
+        adapter = new QuotesRecyclerAdapter(this,data);
         quotesRecycler.setAdapter(adapter);
     }
 
