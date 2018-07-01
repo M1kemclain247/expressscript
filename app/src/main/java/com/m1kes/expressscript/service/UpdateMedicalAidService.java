@@ -1,12 +1,19 @@
 package com.m1kes.expressscript.service;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
+import com.m1kes.expressscript.R;
 import com.m1kes.expressscript.objects.MedicalAid;
 import com.m1kes.expressscript.sqlite.adapters.MedicalAidDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
@@ -22,6 +29,49 @@ public class UpdateMedicalAidService extends IntentService {
 
     public UpdateMedicalAidService() {
         super(LOG_TAG);
+    }
+
+
+    @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            String CHANNEL_ID = "my_channel_01";
+
+            CharSequence name = "my_channel";
+            String Description = "This is my channel";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel.setDescription(Description);
+            notificationManager.createNotificationChannel(mChannel);
+
+
+
+            Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("")
+                    .setAutoCancel(true);
+
+            Notification notification = builder.build();
+            startForeground(1, notification);
+
+
+            Log.i(LOG_TAG, "Creating notification channel!!!");
+        } else {
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+
+            Notification notification = builder.build();
+
+            startForeground(1, notification);
+        }
+        return START_STICKY;
     }
 
     @Override

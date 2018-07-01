@@ -36,13 +36,57 @@ public class CheckMessagesService extends IntentService {
         super("CheckMessagesService");
     }
 
-    @Override
-    public ComponentName startService(Intent service) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            getApplicationContext().startForegroundService(service);
-        }
 
-        return super.startService(service);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+
+    }
+
+    @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            String CHANNEL_ID = "my_channel_01";
+
+            CharSequence name = "my_channel";
+            String Description = "This is my channel";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel.setDescription(Description);
+            notificationManager.createNotificationChannel(mChannel);
+
+
+
+            Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("")
+                    .setAutoCancel(true);
+
+            Notification notification = builder.build();
+            startForeground(1, notification);
+
+
+            Log.i(LOG_TAG, "Creating notification channel!!!");
+        } else {
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText("")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true);
+
+            Notification notification = builder.build();
+
+            startForeground(1, notification);
+        }
+        return START_STICKY;
+
     }
 
     @Override
@@ -125,6 +169,8 @@ public class CheckMessagesService extends IntentService {
 
         String CHANNEL_ID = "my_channel_01";
 
+        Log.i(LOG_TAG, "going to be sending a notification now!");
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
             CharSequence name = "my_channel";
@@ -139,6 +185,7 @@ public class CheckMessagesService extends IntentService {
             mChannel.setShowBadge(false);
             notificationManager.createNotificationChannel(mChannel);
 
+            Log.i(LOG_TAG, "Creating notification channel!!!");
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
@@ -153,6 +200,10 @@ public class CheckMessagesService extends IntentService {
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder.setContentIntent(resultPendingIntent);
+
+        startForeground(NOTIFICATION_ID,builder.build());
+
+        Log.i(LOG_TAG, "Starting foreground notification!");
 
   //      this.startForeground(NOTIFICATION_ID,builder.build());
 //

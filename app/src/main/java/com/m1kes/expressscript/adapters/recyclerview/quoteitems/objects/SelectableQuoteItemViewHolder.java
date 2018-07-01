@@ -36,6 +36,18 @@ public class SelectableQuoteItemViewHolder extends RecyclerView.ViewHolder {
                 itemSelectedListener.onItemSelected(mItem);
             }
         });
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mItem.isSelected() && getItemViewType() == MULTI_SELECTION) {
+                    setChecked(false);
+                } else {
+                    setChecked(true);
+                }
+                itemSelectedListener.onItemSelected(mItem);
+            }
+        });
     }
 
     public void setChecked(boolean value) {
