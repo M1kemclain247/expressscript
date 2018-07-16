@@ -24,6 +24,10 @@ public class CustomDate {
         System.out.println("Current Time in this Object : " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(calendar.getTime()));
     }
 
+    public String getFormattedTime(String pattern){
+        return new SimpleDateFormat(pattern,Locale.US).format(calendar.getTime());
+    }
+
     public long getLongTime() {
         return calendar.getTimeInMillis();
     }
