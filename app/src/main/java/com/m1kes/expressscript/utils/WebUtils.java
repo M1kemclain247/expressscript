@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -20,6 +21,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONObject;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
 
 public class WebUtils {
 
@@ -117,6 +121,61 @@ public class WebUtils {
                     return post_params;
                 }
             };
+            queue.add(postRequest);
+
+        }
+
+    }
+
+
+    public interface JsonResponse{
+        void onSuccess(JSONObject response);
+        void onFailed(String error);
+    }
+
+    public static AdvanceJsonPostRequest getPostRequest(Context context , String url,JSONObject params,JsonResponse callback, ProgressDialog dialog){
+        return new AdvanceJsonPostRequest(callback,url,context,params,dialog);
+    }
+
+
+    public static class AdvanceJsonPostRequest extends AsyncTask<Object,String,String>{
+
+        private JsonResponse callback;
+        private String url;
+        private Context context;
+        private JSONObject params;
+        private ProgressDialog dialog;
+
+        public AdvanceJsonPostRequest(JsonResponse callback,String url,Context context,JSONObject params,ProgressDialog dialog) {
+            this.callback = callback;
+            this.url = url;
+            this.context = context;
+            this.params = params;
+            this.dialog = dialog;
+        }
+
+        @Override
+        protected String doInBackground(Object... objects) {
+            post(context,url,params);
+            return "";
+        }
+
+        private void post(Context context, String url,JSONObject params){
+
+            RequestQueue queue = Volley.newRequestQueue(context);
+            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, params, new Response.Listener<org.json.JSONObject>() {
+                @Override
+                public void onResponse(org.json.JSONObject response) {
+                    callback.onSuccess(response);
+                    dialog.dismiss();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    callback.onFailed(error.getLocalizedMessage());
+                    dialog.dismiss();
+                }
+            });
             queue.add(postRequest);
 
         }

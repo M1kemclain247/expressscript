@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 
 import com.m1kes.expressscript.sqlite.tables.MedicalAidTable;
 import com.m1kes.expressscript.sqlite.tables.MessageTable;
+import com.m1kes.expressscript.sqlite.tables.OrdersTable;
 import com.m1kes.expressscript.sqlite.tables.QuoteItemsTable;
 import com.m1kes.expressscript.sqlite.tables.QuotesTable;
 import com.m1kes.expressscript.sqlite.tables.ProductsTable;
@@ -41,6 +42,9 @@ public class DBContentProvider extends ContentProvider {
 
     public static final Uri QUOTE_ITEMS_URI = Uri.parse("content://" + AUTHORITY
             + "/" + QuoteItemsTable.TABLE_NAME);
+
+    public static final Uri ORDERS_URI = Uri.parse("content://" + AUTHORITY
+            + "/" + OrdersTable.TABLE_NAME);
 
     private SQLiteDatabase db;
 

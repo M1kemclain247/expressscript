@@ -1,5 +1,6 @@
 package com.m1kes.expressscript.objects.custom;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +27,20 @@ public class CustomDate {
 
     public String getFormattedTime(String pattern){
         return new SimpleDateFormat(pattern,Locale.US).format(calendar.getTime());
+    }
+
+    public static CustomDate fromString(String time){
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+        try {
+            cal.setTime(sdf.parse(time));// all done
+
+            return new CustomDate(cal.getTimeInMillis());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public long getLongTime() {

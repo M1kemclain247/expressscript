@@ -5,10 +5,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -21,28 +21,26 @@ import com.m1kes.expressscript.adapters.recyclerview.quoteitems.SelectableQuoteI
 import com.m1kes.expressscript.adapters.recyclerview.quoteitems.adapters.SelectableQuoteItemRecyclerAdapter;
 import com.m1kes.expressscript.adapters.recyclerview.quoteitems.objects.SelectableQuoteItemViewHolder;
 import com.m1kes.expressscript.objects.Order;
+import com.m1kes.expressscript.objects.OrderWrapper;
 import com.m1kes.expressscript.objects.PaymentMode;
 import com.m1kes.expressscript.objects.Quote;
 import com.m1kes.expressscript.objects.QuoteItem;
 import com.m1kes.expressscript.objects.custom.CustomDate;
-import com.m1kes.expressscript.sqlite.adapters.QuotesDBAdapter;
+import com.m1kes.expressscript.sqlite.adapters.OrdersDBAdapter;
 import com.m1kes.expressscript.storage.ClientIDManager;
+import com.m1kes.expressscript.storage.OrderRefGenerator;
 import com.m1kes.expressscript.utils.CoreUtils;
 import com.m1kes.expressscript.utils.EndPoints;
 import com.m1kes.expressscript.utils.WebUtils;
 
-import org.json.JSONException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.sql.SQLOutput;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -119,16 +117,58 @@ public class QuoteDetails extends AppCompatActivity implements SelectableQuoteIt
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        WebUtils.JsonWebPost webPost = WebUtils.postJsonRequest(context, new WebUtils.OnResponseCallback() {
+
+                        final Order order = new Order();
+
+                        order.setClientID(ClientIDManager.getClientID(context));
+                        order.setDeviceRef("" + OrderRefGenerator.getNextOrderNo(context));
+                        order.setDescription(quote.getContent());
+                        order.setTransaction_date(new CustomDate(System.currentTimeMillis()));
+                        order.setAddress("Harare , Zimbabwe");
+                        order.setTotal(getTotalPrice());
+                        order.setPaymentMode(PaymentMode.BANK_TRANSFER);
+                        order.setDrugs(getSelectedItems());
+
+                        try {
+
+                        JSONObject object = new JSONObject();
+
+                        object.put("ClientId", "" + order.getClientID());
+                        object.put("DeviceRef", order.getDeviceRef());
+                        object.put("Description", "");
+                        object.put("TransactionDate", "" + order.getTransaction_date().getFormattedTime("yyyy-MM-dd hh:mm:ss"));
+                        object.put("Address", order.getAddress());
+                        object.put("Total", "" + order.getTotal());
+                        object.put("PaymentMode", order.getPaymentMode().toString());
+
+                        JSONArray jArray = new JSONArray();
+                        for (QuoteItem drug : getSelectedItems()) {
+                            JSONObject json = new JSONObject();
+                            json.put("ProductId", drug.getProductID());
+                            json.put("Quantity", drug.getQuantity());
+                            json.put("UnitPrice", drug.getUnitPrice());
+                            json.put("Total", drug.getTotal());
+                            jArray.put(json);
+                        }
+                        object.put("Drugs", jArray.toString());
+
+                            System.out.println("Object : " + object.toString(2));
+
+                        WebUtils.AdvanceJsonPostRequest request =  WebUtils.getPostRequest(context, EndPoints.API_URL + EndPoints.API_CRATE_ORDER, object, new WebUtils.JsonResponse() {
                             @Override
-                            public void onSuccess(String response) {
+                            public void onSuccess(org.json.JSONObject response) {
                                 System.out.println("Response is : " + response);
                                 try {
-                                    Object obj = new JSONParser().parse(response);
+                                    String message = (String) response.get("Message");
+                                    System.out.println("Message Response is : " + message);
 
-                                    JSONObject jsonResponse = (JSONObject) obj;
-                                    int id = Integer.parseInt((String) jsonResponse.get("Message"));
+                                    int id = Integer.parseInt(message);
 
+                                    OrderWrapper wrapper = new OrderWrapper();
+                                    wrapper.setId(id);
+                                    wrapper.setOrder(order);
+
+                                    OrdersDBAdapter.add(wrapper,context);
 
                                     Toast.makeText(context, "Order has been successfully created!", Toast.LENGTH_LONG).show();
 
@@ -145,65 +185,22 @@ public class QuoteDetails extends AppCompatActivity implements SelectableQuoteIt
                             }
 
                             @Override
-                            public void onFailed() {
+                            public void onFailed(String error) {
                                 System.out.println("Failed to register!");
                                 Toast.makeText(context, "Failed to create order!", Toast.LENGTH_LONG).show();
                             }
+                        },dialog);
 
-                            @Override
-                            public void onCompleteTask() {
-                                dialog.dismiss();
-
-                            }
-                        }, dialog);
-
-                        Order order = new Order();
-
-                        order.setClientID(ClientIDManager.getClientID(context));
-                        order.setDeviceRef(CoreUtils.getDeviceIMEI(context, getParent()));
-                        order.setDescription(quote.getContent());
-                        order.setTransaction_date(new CustomDate(System.currentTimeMillis()));
-                        order.setAddress("Harare , Zimbabwe");
-                        order.setTotal(getTotalPrice());
-                        order.setPaymentMode(PaymentMode.BANK_TRANSFER);
-                        order.setDrugs(getSelectedItems());
+                        request.execute();
 
 
-                        Map<String, String> params = new HashMap<>();
-                        params.put("ClientId", "" + order.getClientID());
-                        params.put("DeviceRef", order.getDeviceRef());
-                        params.put("Description", order.getDescription());
 
-                        params.put("TransactionDate", "" + order.getTransaction_date().getFormattedTime("yyyy-MM-dd hh:mm:ss"));
-                        params.put("Address", order.getAddress());
-                        params.put("Total", "" + order.getTotal());
-                        params.put("PaymentMode", order.getPaymentMode().toString());
-
-                        JSONArray jArray = new JSONArray();
-                        for (QuoteItem drug : getSelectedItems()) {
-                            JSONObject json = new JSONObject();
-                            json.put("ProductId", drug.getProductID());
-                            json.put("Quantity", drug.getQuantity());
-                            json.put("UnitPrice", drug.getUnitPrice());
-                            json.put("Total", drug.getTotal());
-                            jArray.add(json);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        params.put("Drugs", jArray.toJSONString());
-
-
-                     //   params.put("Drugs", getSelectedItems().toString());
-
-                        System.out.println("PARAMS FOR WEB REQUEST : ");
-
-                        System.out.println("" + params);
-
-                        System.out.println("Posting Json : " + params);
-
-                        webPost.execute(EndPoints.API_URL + EndPoints.API_CRATE_ORDER, params);
 
                     }
                 }, 1000);
-
 
     }
 

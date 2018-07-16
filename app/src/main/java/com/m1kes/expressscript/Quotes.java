@@ -59,6 +59,10 @@ public class Quotes extends AppCompatActivity {
         setupRecyclerView();
     }
 
+
+
+
+
     private void checkProductStatus(final Quote quote){
 
         WebUtils.SimpleHttpURLWebRequest request = WebUtils.getSimpleHttpRequest(new WebUtils.OnResponseCallback() {

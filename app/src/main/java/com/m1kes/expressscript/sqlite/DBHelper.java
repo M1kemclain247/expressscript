@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.m1kes.expressscript.sqlite.tables.MedicalAidTable;
 import com.m1kes.expressscript.sqlite.tables.MessageTable;
+import com.m1kes.expressscript.sqlite.tables.OrdersTable;
 import com.m1kes.expressscript.sqlite.tables.QuoteItemsTable;
 import com.m1kes.expressscript.sqlite.tables.QuotesTable;
 import com.m1kes.expressscript.sqlite.tables.ProductsTable;
@@ -18,7 +19,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "express_script.db";
     private static String DATABASE_PATH = "";
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 19;
     private static Context context;
 
 
@@ -40,6 +41,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ProductsTable.onCreate(sqLiteDatabase);
         QuotesTable.onCreate(sqLiteDatabase);
         QuoteItemsTable.onCreate(sqLiteDatabase);
+        OrdersTable.onCreate(sqLiteDatabase);
 
         Log.e(LOG_TAG,"OnCreate called for database and tables!");
     }
@@ -53,6 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ProductsTable.onUpgrade(sqLiteDatabase,old_version,new_version);
         QuotesTable.onUpgrade(sqLiteDatabase,old_version,new_version);
         QuoteItemsTable.onUpgrade(sqLiteDatabase,old_version,new_version);
+        OrdersTable.onUpgrade(sqLiteDatabase,old_version,new_version);
 
         Log.e(LOG_TAG,"OnUpgrade called for database and tables!");
     }
