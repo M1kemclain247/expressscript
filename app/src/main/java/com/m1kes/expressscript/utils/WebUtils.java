@@ -57,6 +57,9 @@ public class WebUtils {
         protected Void doInBackground(Object... args) {
 
             String url = (String)args[0];
+            System.out.println("Making Web Request....");
+            System.out.println("Url : " + url);
+
             Map<String,String> params = (Map<String,String>)args[1];
 
             post(context,url,params);

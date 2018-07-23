@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_assign_aid"
-        android:icon="@drawable/check"
+        android:icon="@drawable/ic_account_circle_black_24dp"
         android:iconTint="@color/green"
         android:title=""
         app:showAsAction="always"/>
